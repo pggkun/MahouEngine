@@ -1,5 +1,5 @@
-# TKS Mahou Engine
-Engine 2D/3D para projetos futuros
+# Mahou Engine
+Engine simples 2D/3D baseada em SDL2/OpenGL
 
 - [x] Exibição de sprites
 - [x] Animação de Sprites
@@ -10,11 +10,13 @@ Engine 2D/3D para projetos futuros
 - [x] Entidade de jogo
 - [x] Cena
 - [x] Exibição de texto
-- [ ] Imagens na camada UI
 - [x] Colisão Circle - Circle
-- [ ] Colisão Circle - Rect
-- [ ] Modelos 3D
 - [x] Materiais
+- [x] Instancing
+- [ ] Imagens na camada UI
+- [ ] Colisão Circle - Rect
+- [ ] Colisão Rect - Rect (AABB)
+- [ ] Modelos 3D
 
 
 ## Instalação
