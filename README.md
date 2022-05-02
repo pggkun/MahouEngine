@@ -1,42 +1,30 @@
 # Mahou Engine
-Engine simples 2D/3D baseada em SDL2/OpenGL
+Simple 2D/3D game engine based on SDL2/OpenGL
 
-- [x] Exibição de sprites
-- [x] Animação de Sprites
-- [x] Sprites com Alpha
-- [x] Transformações Afins
-- [x] Co-rotinas
-- [x] Câmera
-- [x] Entidade de jogo
-- [x] Cena
-- [x] Exibição de texto
-- [x] Colisão Circle - Circle
-- [x] Materiais
+- [x] Sprite render
+- [x] Sprite Animation
+- [x] Sprites with Alpha
+- [x] Affine transformation
+- [x] Coroutine
+- [x] Camera
+- [x] Game entities
+- [x] Scene
+- [x] Text render
+- [x] Collision Circle - Circle
+- [x] Materials
 - [x] Instancing
-- [ ] Imagens na camada UI
-- [ ] Colisão Circle - Rect
-- [ ] Colisão Rect - Rect (AABB)
-- [ ] Modelos 3D
+- [x] Lua scripting support
+- [ ] UI Image layer
+- [ ] Collision Circle - Rect
+- [ ] Collision Rect - Rect (AABB)
+- [ ] 3D Models
 
+## Dependencies
 
-## Instalação
+For Windows users, install [msys2](https://www.msys2.org/) to enable make.
 
-Instale qualquer ferramenta que possibilite a utilização do make, de preferência o [msys2](https://www.msys2.org/).
+## Build
 
-## Como Buildar
+At your shell, run `make res` to build all resources and then run `make` to compile all the examples inside the [examples](examples/) folder.
 
-Estando na pasta que contém o Makefile, execute:
-```
-make res
-```
-Tal comando irá compilar headers contendo os binários referentes a todos
-os aquivos pngs (Caso seja necessário compilar outras extensões basta adicionar a regra no Makefile).
-
-E depois:
-```
-make
-```
-Tal comando irá compilar todos os projetos que estiverem na pasta [examples](examples/),
-criando uma pasta **build** contendo o executável e as dlls necessárias.
-
-![movement](bit/mahou.gif)
+![movement](.github/screen.png)
