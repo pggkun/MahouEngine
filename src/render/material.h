@@ -1,8 +1,6 @@
 #ifndef _MATERIAL_H_
 #define _MATERIAL_H_
 
-#include <gl/glcorearb.h>
-#include <gl/glext.h>
 #include <glm.hpp>
 #include <ext/matrix_clip_space.hpp>
 #include <gtc/type_ptr.hpp>

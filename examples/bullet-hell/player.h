@@ -2,8 +2,6 @@
 #define _PLAYER_H_
 #include <game_entity.h>
 #include "projectile_scene.h"
-#include "pool_scene.h"
-#include "projectile.h"
 
 class Player : public GameEntity
 {
@@ -18,7 +16,6 @@ public:
     Player(AnimatedSprite *spr, Camera *cam) : GameEntity(spr, cam) {}
     ~Player();
 
-    PoolScene *currentScene;
     ProjectileScene *currScene;
     void Start() override;
     void Update() override;

@@ -1,8 +1,6 @@
 #include <window.h>
 #include <stdio.h>
 #include <time.h>
-#include <gl/glcorearb.h>
-#include <gl/glext.h>
 
 #include <material.h>
 #include <mesh.h>
@@ -20,6 +18,7 @@ int main(int ArgCount, char **Args)
 {
     Window *window = new Window;
     window->init(WINDOW_TITLE, WIDTH, HEIGHT);
+    glewInit();
     glViewport(0, 0, WIDTH, HEIGHT);
 
     Camera *mainCam = new Camera();
@@ -30,7 +29,6 @@ int main(int ArgCount, char **Args)
     mainCam->eye = glm::vec3{0.0f, 0.0f, 6.0f};
     mainCam->center = glm::vec3{0.0f, 0.0f, 0.0f};
     mainCam->up = glm::vec3{0.0f, 1.0f, 0.0f};
-
     Shader shader(vs, fs, nullptr);
     Texture *texture = new Texture(bichin_png, bichin_png_size);
     Material *spriteDefault = new Material();

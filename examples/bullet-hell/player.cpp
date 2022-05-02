@@ -1,5 +1,4 @@
 #include "player.h"
-#include "projectile.h"
 #include <sakfly_png.h>
 #include <bullet1_png.h>
 #include <bulet2_png.h>
@@ -88,75 +87,12 @@ void Player::DrawLife()
 
 void Player::Shoot()
 {
-    float x_offset = 0.6f;
-    glm::vec3 new_pos = glm::vec3{transform->position.x + x_offset, transform->position.y, transform->position.z + this->bullet_layer};
-    glm::vec3 acc = glm::vec3{0,-10,0};
-    glm::vec3 vel = glm::vec3{5, 5, 0};
-    Projectile *bullet;
-    if (currentScene->inactive_entities.size() > 0)
-        bullet = currentScene->GetFromInactive();
-    else
-        bullet = (Projectile *)currentScene->memory_pool.New();
-    bullet->Load(nullptr, this->camera, vel, acc, new_pos, bullet1_png, bullet1_png_size);
-    currentScene->Add(bullet);
-    //bullet->current_scene = this->currentScene;
-    this->bullet_layer += 0.001f;
+    //TODO
 }
 
 void Player::ShootPattern1()
 {
-    float x_offset = 0.6f;
-    glm::vec3 new_pos = glm::vec3{transform->position.x + x_offset, transform->position.y, transform->position.z + this->bullet_layer};
-    glm::vec3 acc = glm::vec3{-6, 0, 0};
-    glm::vec3 vel = glm::vec3{3, 0, 0};
-    Projectile *bullet;
-    if (currentScene->inactive_entities.size() > 0)
-        bullet = currentScene->GetFromInactive();
-    else
-        bullet = (Projectile *)currentScene->memory_pool.New();
-    bullet->Load(nullptr, this->camera, vel, acc, new_pos, bullet1_png, bullet1_png_size);
-    currentScene->Add(bullet);
-    //bullet->current_scene = this->currentScene;
-    this->bullet_layer += 0.001f;
-
-    new_pos = glm::vec3{transform->position.x + x_offset, transform->position.y, transform->position.z + this->bullet_layer};
-    acc = glm::vec3{6, 0, 0};
-    vel = glm::vec3{-3, 0, 0};
-    Projectile *bullet2;
-    if (currentScene->inactive_entities.size() > 0)
-        bullet2 = currentScene->GetFromInactive();
-    else
-        bullet2 = (Projectile *)currentScene->memory_pool.New();
-    bullet2->Load(nullptr, this->camera, vel, acc, new_pos, bullet1_png, bullet1_png_size);
-    currentScene->Add(bullet2);
-    //bullet2->current_scene = this->currentScene;
-    this->bullet_layer += 0.001f;
-
-    new_pos = glm::vec3{transform->position.x + x_offset, transform->position.y, transform->position.z + this->bullet_layer};
-    acc = glm::vec3{0, -6, 0};
-    vel = glm::vec3{0, 3, 0};
-    Projectile *bullet3;
-    if (currentScene->inactive_entities.size() > 0)
-        bullet3 = currentScene->GetFromInactive();
-    else
-        bullet3 = (Projectile *)currentScene->memory_pool.New();
-    bullet3->Load(nullptr, this->camera, vel, acc, new_pos, bullet1_png, bullet1_png_size);
-    currentScene->Add(bullet3);
-    //bullet3->current_scene = this->currentScene;
-    this->bullet_layer += 0.001f;
-
-    new_pos = glm::vec3{transform->position.x + x_offset, transform->position.y, transform->position.z + this->bullet_layer};
-    acc = glm::vec3{0, 6, 0};
-    vel = glm::vec3{0, -3, 0};
-    Projectile *bullet4;
-    if (currentScene->inactive_entities.size() > 0)
-        bullet4 = currentScene->GetFromInactive();
-    else
-        bullet4 = (Projectile *)currentScene->memory_pool.New();
-    bullet4->Load(nullptr, this->camera, vel, acc, new_pos, bullet1_png, bullet1_png_size);
-    currentScene->Add(bullet4);
-    //bullet4->current_scene = this->currentScene;
-    this->bullet_layer += 0.001f;
+    // TODO
 }
 
 void Player::FadeOut()

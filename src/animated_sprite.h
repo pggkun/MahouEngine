@@ -3,8 +3,6 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include <gl/glcorearb.h>
-#include <gl/glext.h>
 #include <glm.hpp>
 #include <ext/matrix_clip_space.hpp>
 #include <gtc/type_ptr.hpp>
@@ -53,7 +51,7 @@ const char *const fragmentShaderSource = R"text(
     }
 )text";
 
-class AnimatedSprite
+class [[deprecated("Use Sprite instead.")]] AnimatedSprite
 {
     private:
         int current_animation_index;

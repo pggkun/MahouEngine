@@ -27,7 +27,7 @@ void Mesh::Initialize()
 {
     if (this->vao == 0) glGenVertexArrays(1, &this->vao);
     if (this->vbo == 0) glGenBuffers(1, &this->vbo);
-    //printf("===========================================================\nvbo: %d\n", vbo);
+
     glBindVertexArray(this->vao);
 
     glBindBuffer(GL_ARRAY_BUFFER, this->vbo);

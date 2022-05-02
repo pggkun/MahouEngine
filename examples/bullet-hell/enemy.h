@@ -27,7 +27,6 @@ public:
     Enemy(AnimatedSprite *spr, Camera *cam) : GameEntity(spr, cam) {}
     ~Enemy();
 
-    PoolScene *currentScene;
     void Start() override;
     void Update() override;
     Player *player;

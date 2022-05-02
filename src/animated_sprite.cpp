@@ -13,7 +13,6 @@ GLuint AnimatedSprite::CreateAndCompileShader(GLenum type, const char *source)
     GLuint handle = glCreateShader(type);
     if (!handle)
     {
-        //TRACE("%u: cannot create shader", type);
         return 0;
     }
     glShaderSource(handle, 1, &source, nullptr);
@@ -23,7 +22,6 @@ GLuint AnimatedSprite::CreateAndCompileShader(GLenum type, const char *source)
     if (!success)
     {
         glGetShaderInfoLog(handle, sizeof(msg), nullptr, msg);
-        //TRACE("%u: %s\n", type, msg);
         glDeleteShader(handle);
         return 0;
     }
@@ -205,8 +203,6 @@ void AnimatedSprite::Draw()
     glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void *)offsetof(Vertex, texcoord));
     glEnableVertexAttribArray(1);
     glDrawArrays(GL_TRIANGLES, 0, 6);
-    //printf("anbtes: %d\n", GameTime::draw_calls);
     GameTime::draw_calls += 1;
-    //printf("depois: %d\n", GameTime::draw_calls);
     glBindVertexArray(0);
 } 

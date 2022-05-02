@@ -1,6 +1,5 @@
 #ifndef _PROJECTILE_SCENE_H_
 #define _PROJECTILE_SCENE_H_
-#include <scene.h>
 #include <memory_pool.h>
 #include "projectile_object.h"
 

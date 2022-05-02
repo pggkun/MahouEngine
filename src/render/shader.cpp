@@ -2,7 +2,6 @@
 
 Shader::Shader(const char *vertexCode, const char *fragmentCode, const char *geometryCode)
 {
-
     const char *vShaderCode = vertexCode;
     const char *fShaderCode = fragmentCode;
     unsigned int vertex, fragment;

@@ -1,8 +1,6 @@
 #include <window.h>
 #include <stdio.h>
 #include <time.h>
-#include <gl/glcorearb.h>
-#include <gl/glext.h>
 
 #include <material.h>
 #include <mesh.h>
@@ -21,6 +19,7 @@ int main(int ArgCount, char **Args)
 {
     Window *window = new Window;
     window->init(WINDOW_TITLE, WIDTH, HEIGHT);
+    glewInit();
     glViewport(0, 0, WIDTH, HEIGHT);
 
     Camera *mainCam = new Camera();

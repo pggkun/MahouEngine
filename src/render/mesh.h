@@ -1,12 +1,11 @@
 #ifndef _MESH_H_
 #define _MESH_H_
 
-#include <gl/glcorearb.h>
-#include <gl/glext.h>
 #include <glm.hpp>
 #include <ext/matrix_clip_space.hpp>
 #include <gtc/type_ptr.hpp>
 #include <vector>
+#include "shader.h"
 
 struct Vertex
 {

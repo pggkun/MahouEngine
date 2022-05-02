@@ -16,7 +16,7 @@ static bool GLLogCall(const char *function, const char *file, int line)
 {
     while (GLenum error = glGetError())
     {
-        //std::cout << "[OpenGL Errorr] (" << error << "): " << function << " " << file << ":" << line << std::endl;
+        std::cout << "[OpenGL Errorr] (" << error << "): " << function << " " << file << ":" << line << std::endl;
         return false;
     }
     return true;
@@ -24,7 +24,6 @@ static bool GLLogCall(const char *function, const char *file, int line)
 
 Material::Material()
 {
-    //glGenBuffers(1, &vbo);
     albedo = {1, 1, 1, 1};
 }
 
@@ -59,9 +58,7 @@ void Material::Bind()
     {
         for (std::list<std::pair<Transform *, Mesh *>>::iterator it = objectsToDraw.begin(); it != objectsToDraw.end(); ++it)
         {
-            //(*it).second->Initialize();
             GLCall(glBindVertexArray((*it).second->vao));
-            // set attribute pointers for matrix (4 times vec4)
             GLCall(glEnableVertexAttribArray(3));
             GLCall(glVertexAttribPointer(3, 4, GL_FLOAT, GL_FALSE, sizeof(glm::mat4), (void *)0));
             GLCall(glEnableVertexAttribArray(4));
@@ -94,9 +91,7 @@ void Material::SetupMatrices()
         GLCall(glBindBuffer(GL_ARRAY_BUFFER, vbo));
         GLCall(glBufferData(GL_ARRAY_BUFFER, modelMatrices.size() * sizeof(glm::mat4), &modelMatrices.front(), GL_STATIC_DRAW));
     }
-    //glDeleteBuffers(1, &vbo);
 
-    
 }
 
 void Material::Draw()
@@ -107,14 +102,10 @@ void Material::Draw()
     shader->setInt("tex_diffuse", 0);
     GLCall(glActiveTexture(GL_TEXTURE0));
     GLCall(glBindTexture(GL_TEXTURE_2D, tex));
-    // glBindBuffer(GL_ARRAY_BUFFER, vbo);
     for (std::list<std::pair<Transform *, Mesh *>>::iterator it = objectsToDraw.begin(); it != objectsToDraw.end(); ++it)
     {
-        // glBindBuffer(GL_ARRAY_BUFFER,(*it).second->vbo);
         GLCall(glBindVertexArray((*it).second->vao));
-        // glDrawElementsInstanced(GL_TRIANGLES, static_cast<unsigned int>((*it).second->vertices.size()), GL_UNSIGNED_INT, 0, objectsToDraw.size());
         GLCall(glDrawArraysInstanced(GL_TRIANGLES, 0, 6, objectsToDraw.size()));
-        
         GLCall(glBindVertexArray(0));
     }
     GameTime::draw_calls += 1;

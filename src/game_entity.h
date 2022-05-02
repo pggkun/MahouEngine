@@ -5,7 +5,7 @@
 #include "camera.h"
 #include "game_time.h"
 
-class GameEntity
+class [[deprecated("Use GameObject or LuaObject instead.")]] GameEntity
 {
     protected:
         glm::mat4 modelViewMatrix;
