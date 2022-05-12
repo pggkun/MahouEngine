@@ -13,45 +13,8 @@
 #include <list>
 #include <vector>
 
-const char *const vs = R"text(
-    #version 330 core
-
-    layout (location = 0) in vec3 aPos;
-    layout (location = 1) in vec2 aTexCoord;
-    layout (location = 3) in mat4 aInstanceMatrix;
-
-    out vec2 vtxTexCoord;
-
-    uniform mat4 projMtx;
-    
-
-    void main()
-    {
-        // Calculate position
-        vec4 pos = aInstanceMatrix * vec4(aPos, 1.0);
-        gl_Position = projMtx * pos;
-        vtxTexCoord = aTexCoord;
-    }
-    )text";
-
-const char *const fs = R"text(
-    #version 330 core
-
-    in vec2 vtxTexCoord;
-
-    out vec4 fragColor;
-    uniform sampler2D tex_diffuse;
-    uniform vec4 color;
-
-    void main()
-    {
-        vec4 texDiffuseColor = texture(tex_diffuse, vtxTexCoord);
-        //vec3 fragLightColor = 1.0 + 1.0*texDiffuseColor.rgb;
-        //fragColor = vec4(min(fragLightColor, 1.0), texDiffuseColor.a);
-
-        fragColor = texDiffuseColor * color;
-    }
-    )text";
+#include <sprite_inst_vert_shader.h>
+#include <sprite_inst_frag_shader.h>
 
 class Material
 {

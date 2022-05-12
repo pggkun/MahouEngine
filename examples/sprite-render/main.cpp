@@ -29,7 +29,9 @@ int main(int ArgCount, char **Args)
     mainCam->eye = glm::vec3{0.0f, 0.0f, 6.0f};
     mainCam->center = glm::vec3{0.0f, 0.0f, 0.0f};
     mainCam->up = glm::vec3{0.0f, 1.0f, 0.0f};
-    Shader shader(vs, fs, nullptr);
+    Shader shader(
+        reinterpret_cast<const char *>(sprite_inst_vert_shader),
+        reinterpret_cast<const char *>(sprite_inst_frag_shader), nullptr);
     Texture *texture = new Texture(bichin_png, bichin_png_size);
     Material *spriteDefault = new Material();
     spriteDefault->SetProperties(&shader, texture, mainCam, {1, 1, 1, 1});

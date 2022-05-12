@@ -49,7 +49,9 @@ int main(int ArgCount, char **Args)
     glewInit();
     glViewport(0, 0, WIDTH, HEIGHT);
 
-    Shader text_shader(textVertexShaderSource, textFragmentShaderSource, nullptr);
+    Shader text_shader(
+        reinterpret_cast<const char*>(text_vert_shader), 
+        reinterpret_cast<const char*>(text_frag_shader), nullptr);
     text_shader.use();
 
     Camera *mainCam = new Camera();
@@ -104,7 +106,9 @@ int main(int ArgCount, char **Args)
     background->transform = bgt;
     background->Start();
 
-    Shader shader(vs, fs, nullptr);
+    Shader shader(
+        reinterpret_cast<const char *>(sprite_inst_vert_shader),
+        reinterpret_cast<const char *>(sprite_inst_frag_shader), nullptr);
 
     Texture *bullet_red = new Texture(bulet2_png, bulet2_png_size);
     Material *red_bullets = new Material;

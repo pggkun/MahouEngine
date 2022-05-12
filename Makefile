@@ -9,11 +9,12 @@ OUTPUT    := game
 LDFLAGS   := -L$(CURDIR)/deps/SDL2/lib -L$(CURDIR)/$(BUILD)/ -L$(CURDIR)/deps/FreeType/lib -L$(CURDIR)/deps/lua/lib -L$(CURDIR)/deps/glew/lib/Release/Win32
 IFLAGS    := -I$(CURDIR)/deps/stb -I$(CURDIR)/deps/SDL2/include -I$(CURDIR)/deps/glm \
 		  									-I$(CURDIR)/$(SOURCE) \
+											-I$(CURDIR)/$(SOURCE)/render/basic_shaders \
 											-I$(CURDIR)/$(SOURCE)/render -I$(CURDIR)/$(RESOURCES) -I$(CURDIR)/deps/FreeType/include \
 											-I$(CURDIR)/deps/lua/include -I$(CURDIR)/deps/glew/include
 LDLIBS 	  := -w -llua -lmingw32 -lSDL2main -lSDL2 -lfreetype -lopengl32 -lglu32
 
-.PHONY: clean, res, example
+.PHONY: clean, res, shaders, example
 
 example:
 	@for entry in ${EXAMPLES};              																		\
@@ -27,8 +28,15 @@ clean:
 	@echo $(EXAMPLES)
 	-$(foreach var,$(EXAMPLES), rm -rd $(var)/$(BUILD);)
 	-$(foreach var,$(EXAMPLES), rm -rf $(var)/$(RESOURCES)/*_png.h;)
+	rm -rf ${SOURCE}/render/basic_shaders/*.h
 
-res: clean
+shaders:
+	@for shader in ${SOURCE}/render/basic_shaders/*.shader;\
+	do \
+		python $(CURDIR)/$(TOOLS)/PGGKBin2h.py $${shader} $${shader/.shader/_shader.h};  \
+	done
+
+res: clean, shaders
 	@for entry in ${EXAMPLES};              								\
     do                                      								\
         for i in $${entry}$(RESOURCES)/*.png;            					\
