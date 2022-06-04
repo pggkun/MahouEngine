@@ -25,8 +25,8 @@ void Mesh::SetupPlane(float x_start, float x_end, float y_start, float y_end, fl
 
 void Mesh::Initialize()
 {
-    if (this->vao == 0) glGenVertexArrays(1, &this->vao);
-    if (this->vbo == 0) glGenBuffers(1, &this->vbo);
+    glGenVertexArrays(1, &this->vao);
+    glGenBuffers(1, &this->vbo);
 
     glBindVertexArray(this->vao);
 
