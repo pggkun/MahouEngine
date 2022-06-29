@@ -71,7 +71,8 @@ void ProjectileObject::Move()
 void ProjectileObject::CustomUpdate()
 {
     Move();
-    GameObject::BaseUpdate();
+    modelViewMatrix = this->camera->viewMatrix() * this->transform->modelMatrix();
+    mesh->modelViewMatrix = this->modelViewMatrix;
 }
 
 void ProjectileObject::Start()

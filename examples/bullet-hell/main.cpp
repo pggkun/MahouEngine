@@ -153,11 +153,10 @@ int main(int ArgCount, char **Args)
         background->Update();
         background->Draw();
 
-        red_bullets->SetupMatrices();
-        red_bullets->Bind();
-        red_bullets->Draw();
-
         bulletScene->Update();
+        red_bullets->SetupMatrices();
+        red_bullets->Draw();
+        
         window->run();
         if (window->Fire1)
         {

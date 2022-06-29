@@ -52,46 +52,18 @@ void Material::SetProperties(Shader *sh, Texture *t, Camera *cam, glm::vec4 al)
     glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA8, t->width, t->height, 0, GL_RGBA, GL_UNSIGNED_BYTE, t->image);
 }
 
-void Material::Bind()
-{
-    if (modelMatrices.size() > 0)
-    {
-        for (std::list<std::pair<Transform *, Mesh *>>::iterator it = objectsToDraw.begin(); it != objectsToDraw.end(); ++it)
-        {
-            GLCall(glBindVertexArray((*it).second->vao));
-            GLCall(glEnableVertexAttribArray(3));
-            GLCall(glVertexAttribPointer(3, 4, GL_FLOAT, GL_FALSE, sizeof(glm::mat4), (void *)0));
-            GLCall(glEnableVertexAttribArray(4));
-            GLCall(glVertexAttribPointer(4, 4, GL_FLOAT, GL_FALSE, sizeof(glm::mat4), (void *)(sizeof(glm::vec4))));
-            GLCall(glEnableVertexAttribArray(5));
-            GLCall(glVertexAttribPointer(5, 4, GL_FLOAT, GL_FALSE, sizeof(glm::mat4), (void *)(2 * sizeof(glm::vec4))));
-            GLCall(glEnableVertexAttribArray(6));
-            GLCall(glVertexAttribPointer(6, 4, GL_FLOAT, GL_FALSE, sizeof(glm::mat4), (void *)(3 * sizeof(glm::vec4))));
-
-            GLCall(glVertexAttribDivisor(3, 1));
-            GLCall(glVertexAttribDivisor(4, 1));
-            GLCall(glVertexAttribDivisor(5, 1));
-            GLCall(glVertexAttribDivisor(6, 1));
-
-            GLCall(glBindVertexArray(0));
-        }
-    }
-}
-
 void Material::SetupMatrices()
 {
     modelMatrices.clear();
     for (std::list<std::pair<Transform *, Mesh *>>::iterator it = objectsToDraw.begin(); it != objectsToDraw.end(); ++it)
     {
-        modelMatrices.push_back((*it).second->modelViewMatrix);
+        modelMatrices.push_back({(*it).second->vertices[0], (*it).second->modelViewMatrix});
+        modelMatrices.push_back({(*it).second->vertices[1], (*it).second->modelViewMatrix});
+        modelMatrices.push_back({(*it).second->vertices[2], (*it).second->modelViewMatrix});
+        modelMatrices.push_back({(*it).second->vertices[3], (*it).second->modelViewMatrix});
+        modelMatrices.push_back({(*it).second->vertices[4], (*it).second->modelViewMatrix});
+        modelMatrices.push_back({(*it).second->vertices[5], (*it).second->modelViewMatrix});
     }
-    if(modelMatrices.size() > 0)
-    {
-        GLCall(glBindBuffer(GL_ARRAY_BUFFER, 0));
-        GLCall(glBindBuffer(GL_ARRAY_BUFFER, vbo));
-        GLCall(glBufferData(GL_ARRAY_BUFFER, modelMatrices.size() * sizeof(glm::mat4), &modelMatrices.front(), GL_STATIC_DRAW));
-    }
-
 }
 
 void Material::Draw()
@@ -102,13 +74,34 @@ void Material::Draw()
     shader->setInt("tex_diffuse", 0);
     GLCall(glActiveTexture(GL_TEXTURE0));
     GLCall(glBindTexture(GL_TEXTURE_2D, tex));
+    glBindBuffer(GL_ARRAY_BUFFER, vbo);
+
+    glBufferData(GL_ARRAY_BUFFER, modelMatrices.size() * ((sizeof(Vertex)) + sizeof(glm::mat4)), &modelMatrices.front(), GL_STATIC_DRAW);
+    int objectCounter = 0;
     for (std::list<std::pair<Transform *, Mesh *>>::iterator it = objectsToDraw.begin(); it != objectsToDraw.end(); ++it)
     {
-        GLCall(glBindVertexArray((*it).second->vao));
-        GLCall(glDrawArraysInstanced(GL_TRIANGLES, 0, 6, objectsToDraw.size()));
-        GLCall(glBindVertexArray(0));
+            GLCall(glBindVertexArray((*it).second->vao));
+
+            glEnableVertexAttribArray(0);
+            glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(glm::mat4) + sizeof(Vertex), (void *)offsetof(TexMatrix, vertexinfo.position));
+
+            glEnableVertexAttribArray(1);
+            glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, sizeof(glm::mat4) + sizeof(Vertex), (void *)offsetof(TexMatrix, vertexinfo.texcoord));
+
+            GLCall(glEnableVertexAttribArray(3));
+            GLCall(glVertexAttribPointer(3, 4, GL_FLOAT, GL_FALSE, sizeof(glm::mat4) + sizeof(Vertex), (void *)offsetof(TexMatrix, modelMtx)));
+            GLCall(glEnableVertexAttribArray(4));
+            GLCall(glVertexAttribPointer(4, 4, GL_FLOAT, GL_FALSE, sizeof(glm::mat4) + sizeof(Vertex), (void *)(sizeof(glm::vec4) + offsetof(TexMatrix, modelMtx))));
+            GLCall(glEnableVertexAttribArray(5));
+            GLCall(glVertexAttribPointer(5, 4, GL_FLOAT, GL_FALSE, sizeof(glm::mat4) + sizeof(Vertex), (void *)(2 * sizeof(glm::vec4) + offsetof(TexMatrix, modelMtx))));
+            GLCall(glEnableVertexAttribArray(6));
+            GLCall(glVertexAttribPointer(6, 4, GL_FLOAT, GL_FALSE, sizeof(glm::mat4) + sizeof(Vertex), (void *)(3 * sizeof(glm::vec4) + offsetof(TexMatrix, modelMtx))));
+
+            GLCall(glDrawArraysInstanced(GL_TRIANGLES, objectCounter * 6, 6, objectsToDraw.size()));
+            objectCounter++;
     }
     GameTime::draw_calls += 1;
+    GLCall(glBindVertexArray(0));
     GLCall(glBindBuffer(GL_ARRAY_BUFFER, 0));
     }
 }

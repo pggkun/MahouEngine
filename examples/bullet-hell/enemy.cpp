@@ -37,14 +37,14 @@ Enemy::~Enemy()
 
 void Enemy::Update()
 {   timer += GameTime::delta_time;
-    if(timer >= 2.5f)
+    if(timer >= 10.0f)
     {
         
         timer = 0.0;
         delay_timer = 0.0f;
         delay_counter = 0;
 
-        ShootMultiDirection(1.5f, glm::vec3{(rand() % 2 + 0) - 1, (rand() % 2 + 0)  -1 ,0});
+        ShootMultiDirection(0.05f,glm::vec3{0,0,0});// glm::vec3{(rand() % 2 + 0) - 1, (rand() % 2 + 0)  -1 ,0});
     }
 
     if (this->bullet_layer >= 0.0505f + 0.001 * directions.size())

@@ -66,7 +66,6 @@ int main(int ArgCount, char **Args)
 
         simplePlane->Update();
         spriteDefault->SetupMatrices();
-        spriteDefault->Bind();
         spriteDefault->Draw();
 
         SDL_GL_SwapWindow(window->Window);
