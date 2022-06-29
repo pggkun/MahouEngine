@@ -74,12 +74,13 @@ void Material::Draw()
     shader->setInt("tex_diffuse", 0);
     GLCall(glActiveTexture(GL_TEXTURE0));
     GLCall(glBindTexture(GL_TEXTURE_2D, tex));
+    glBindBuffer(GL_ARRAY_BUFFER, vbo);
+
+    glBufferData(GL_ARRAY_BUFFER, modelMatrices.size() * ((sizeof(Vertex)) + sizeof(glm::mat4)), &modelMatrices.front(), GL_STATIC_DRAW);
+    int objectCounter = 0;
     for (std::list<std::pair<Transform *, Mesh *>>::iterator it = objectsToDraw.begin(); it != objectsToDraw.end(); ++it)
     {
             GLCall(glBindVertexArray((*it).second->vao));
-            glBindBuffer(GL_ARRAY_BUFFER, (*it).second->vbo);
-
-            glBufferData(GL_ARRAY_BUFFER, modelMatrices.size() * ((sizeof(Vertex)) + sizeof(glm::mat4)), &modelMatrices.front(), GL_STATIC_DRAW);
 
             glEnableVertexAttribArray(0);
             glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(glm::mat4) + sizeof(Vertex), (void *)offsetof(TexMatrix, vertexinfo.position));
@@ -96,7 +97,8 @@ void Material::Draw()
             GLCall(glEnableVertexAttribArray(6));
             GLCall(glVertexAttribPointer(6, 4, GL_FLOAT, GL_FALSE, sizeof(glm::mat4) + sizeof(Vertex), (void *)(3 * sizeof(glm::vec4) + offsetof(TexMatrix, modelMtx))));
 
-            GLCall(glDrawArraysInstanced(GL_TRIANGLES, 0, 6 * objectsToDraw.size(), objectsToDraw.size() * 6));
+            GLCall(glDrawArraysInstanced(GL_TRIANGLES, objectCounter * 6, 6, objectsToDraw.size()));
+            objectCounter++;
     }
     GameTime::draw_calls += 1;
     GLCall(glBindVertexArray(0));

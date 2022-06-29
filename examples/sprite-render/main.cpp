@@ -8,7 +8,7 @@
 #include <texture.h>
 #include <game_object.h>
 
-#include <bichin_png.h>
+#include <tileset_sample_png.h>
 
 #define WINDOW_TITLE "Mahou Engine - Sprite Render"
 #define WIDTH 640
@@ -33,22 +33,13 @@ int main(int ArgCount, char **Args)
     Shader shader(
         reinterpret_cast<const char *>(sprite_inst_vert_shader),
         reinterpret_cast<const char *>(sprite_inst_frag_shader), nullptr);
-    Texture *texture = new Texture(bichin_png, bichin_png_size);
+    Texture *texture = new Texture(tileset_sample_png, tileset_sample_png_size);
     Material *spriteDefault = new Material();
     spriteDefault->SetProperties(&shader, texture, mainCam, {1, 1, 1, 1});
 
-    Tile *t = new Tile(spriteDefault, mainCam, glm::vec3{0.0f, 0.0f, 0.0f}, texture, 1, 1, 64, 32);
-    Tile *t2 = new Tile(spriteDefault, mainCam, glm::vec3{0.0f, -1.0f, 0.0f}, texture, 1, 2, 64, 32);
-    Tile *t3 = new Tile(spriteDefault, mainCam, glm::vec3{0.0f, -2.0f, 0.0f}, texture, 0, 0, 64, 32);
-
-    /*GameObject *simplePlane = new GameObject();
-    simplePlane->camera = mainCam;
-    simplePlane->SetupPlane(0, 0, 1, 1);
-    simplePlane->MoveTo(0, 0);
-    simplePlane->AssignMaterial(spriteDefault);
-    simplePlane->AssignSprite(32, 64);
-    simplePlane->sprite->AddAnimation(std::vector<int>{32*2 + 1});
-    simplePlane->sprite->SwitchAnimation(1, 1);*/
+    Tile *t = new Tile(spriteDefault, mainCam, glm::vec3{-1.0f, 0.0f, 0.0f}, texture, 0, 1, 4, 4);
+    Tile *t2 = new Tile(spriteDefault, mainCam, glm::vec3{0.0f, 0.0f, 0.0f}, texture, 2, 0, 4, 4);
+    Tile *t3 = new Tile(spriteDefault, mainCam, glm::vec3{1.0f, 0.0f, 0.0f}, texture, 3, 0, 4, 4);
 
     glEnable(GL_DEPTH_TEST);
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
@@ -69,7 +60,6 @@ int main(int ArgCount, char **Args)
         window->run();
 
         spriteDefault->SetupMatrices();
-        spriteDefault->Bind();
         spriteDefault->Draw();
 
         t3->CustomUpdate();
