@@ -154,7 +154,7 @@ int main(int ArgCount, char **Args)
         background->Draw();
 
         red_bullets->SetupMatrices();
-        red_bullets->Bind();
+        // red_bullets->Bind();
         red_bullets->Draw();
 
         bulletScene->Update();

@@ -4,6 +4,7 @@
 
 #include <material.h>
 #include <mesh.h>
+#include <tile.h>
 #include <texture.h>
 #include <game_object.h>
 
@@ -35,14 +36,19 @@ int main(int ArgCount, char **Args)
     Texture *texture = new Texture(bichin_png, bichin_png_size);
     Material *spriteDefault = new Material();
     spriteDefault->SetProperties(&shader, texture, mainCam, {1, 1, 1, 1});
-    GameObject *simplePlane = new GameObject();
+
+    Tile *t = new Tile(spriteDefault, mainCam, glm::vec3{0.0f, 0.0f, 0.0f}, texture, 1, 1, 64, 32);
+    Tile *t2 = new Tile(spriteDefault, mainCam, glm::vec3{0.0f, -1.0f, 0.0f}, texture, 1, 2, 64, 32);
+    Tile *t3 = new Tile(spriteDefault, mainCam, glm::vec3{0.0f, -2.0f, 0.0f}, texture, 0, 0, 64, 32);
+
+    /*GameObject *simplePlane = new GameObject();
     simplePlane->camera = mainCam;
     simplePlane->SetupPlane(0, 0, 1, 1);
     simplePlane->MoveTo(0, 0);
     simplePlane->AssignMaterial(spriteDefault);
-    simplePlane->AssignSprite(4, 1);
-    simplePlane->sprite->AddAnimation(std::vector<int>{0, 1, 2, 3});
-    simplePlane->sprite->SwitchAnimation(1, 0.08f);
+    simplePlane->AssignSprite(32, 64);
+    simplePlane->sprite->AddAnimation(std::vector<int>{32*2 + 1});
+    simplePlane->sprite->SwitchAnimation(1, 1);*/
 
     glEnable(GL_DEPTH_TEST);
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
@@ -62,10 +68,14 @@ int main(int ArgCount, char **Args)
 
         window->run();
 
-        simplePlane->Update();
         spriteDefault->SetupMatrices();
         spriteDefault->Bind();
         spriteDefault->Draw();
+
+        t3->CustomUpdate();
+        t2->CustomUpdate();
+        t->CustomUpdate();
+       
 
         SDL_GL_SwapWindow(window->Window);
         uint64_t currTime = SDL_GetPerformanceCounter();
@@ -73,7 +83,7 @@ int main(int ArgCount, char **Args)
             (currTime - startTime) / static_cast<double>(SDL_GetPerformanceFrequency()));
     }
     delete texture;
-    delete simplePlane;
+    // delete simplePlane;
     delete spriteDefault;
     delete mainCam;
     delete window;

@@ -16,6 +16,12 @@
 #include <sprite_inst_vert_shader.h>
 #include <sprite_inst_frag_shader.h>
 
+struct TexMatrix
+{
+    Vertex vertexinfo;
+    glm::mat4 modelMtx;
+};
+
 class Material
 {
     private:
@@ -32,7 +38,7 @@ class Material
         glm::vec4 albedo;
         Camera *camera;
         int material_id;
-        std::vector<glm::mat4> modelMatrices;
+        std::vector<TexMatrix> modelMatrices;
 
         std::list<std::pair<Transform *, Mesh *>> objectsToDraw;
         void Bind();

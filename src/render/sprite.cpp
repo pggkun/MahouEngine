@@ -23,13 +23,16 @@ Sprite::~Sprite()
 void Sprite::GetEquidistantFrames()
 {
     frames.clear();
-    for (int i=0; i< cols * rows; i++)
+    for (int i=0; i<rows; i++)
     {
-        float sx = (1.0 / cols) * i;
-        float ex = (1.0 / cols) * (i + 1);
-        float sy = (1.0 / rows) * i;
-        float ey = (1.0 / rows) * (i + 1);
-        AddFrame(sx, ex, sy, ey);
+        for (int j = 0; j < cols; j++)
+        {
+            float sx = (1.0 / cols) * j;
+            float ex = (1.0 / cols) * (j + 1);
+            float sy = (1.0 / rows) * i;
+            float ey = (1.0 / rows) * (i + 1);
+            AddFrame(sx, ex, sy, ey);
+        }
     }
 }
 
