@@ -14,6 +14,7 @@ Simple 2D/3D game engine based on SDL2/OpenGL
 - [x] Materials
 - [x] Instancing
 - [x] Lua scripting support
+- [x] Tilesets
 - [ ] UI Image layer
 - [ ] Collision Circle - Rect
 - [ ] Collision Rect - Rect (AABB)
@@ -22,6 +23,7 @@ Simple 2D/3D game engine based on SDL2/OpenGL
 ## Dependencies
 
 For Windows users, install [msys2](https://www.msys2.org/) to enable make.
+For Ubuntu users, run `make deps` to build and install dependencies.
 
 ## Build
 

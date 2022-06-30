@@ -5,7 +5,7 @@ FREETYPE_VERSION=2.12.1
 LUA_VERSION=5.4.4
 
 # LINUX DEPENDENCIES
-sudo apt-get install libgl-dev libgl1-mesa-dev dos2unix libxext-dev git wget
+sudo apt-get install libgl-dev libgl1-mesa-dev dos2unix libxext-dev libsdl2-dev libglu1-mesa-dev freeglut3-dev libglew-dev mesa-common-dev git wget gcc g++
 
 # SDL2
 wget https://www.libsdl.org/release/SDL2-$SDL_VERSION.tar.gz
@@ -63,6 +63,7 @@ make all
 cd ../
 mkdir -p deps/glew/lib
 cp -r glew*/lib/* deps/glew/lib
+cp -r glew*/include deps/glew/
 rm -rf glew* download*
 
 # LUA
@@ -72,8 +73,8 @@ cd lua-$LUA_VERSION
 make generic
 
 cd ../
-mkdir -p deps/LUA/lib deps/LUA/include
-cp -r lua*/src/*.a deps/LUA/lib/
-cp -r lua*/src/*.h  deps/LUA/include
-cp -r lua*/src/*.hpp  deps/LUA/include
+mkdir -p deps/lua/lib deps/lua/include
+cp -r lua*/src/*.a deps/lua/lib/
+cp -r lua*/src/*.h  deps/lua/include
+cp -r lua*/src/*.hpp  deps/lua/include
 rm -rf lua*

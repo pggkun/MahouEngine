@@ -4,15 +4,16 @@ BUILD	  := build
 SOURCE	  := src
 ENGINE	  := engine
 EXAMPLES  := $(sort $(dir $(wildcard $(CURDIR)/examples/*/)))
-CC 		  := g++ -std=c++14
+CC 		  := g++ -std=c++14 -fpermissive
 OUTPUT    := game
+SHELL := /bin/bash
 LDFLAGS   := -L$(CURDIR)/deps/SDL2/lib -L$(CURDIR)/$(BUILD)/ -L$(CURDIR)/deps/FreeType/lib -L$(CURDIR)/deps/lua/lib -L$(CURDIR)/deps/glew/lib/Release/Win32
 IFLAGS    := -I$(CURDIR)/deps/stb -I$(CURDIR)/deps/SDL2/include -I$(CURDIR)/deps/glm \
 		  									-I$(CURDIR)/$(SOURCE) \
 											-I$(CURDIR)/$(SOURCE)/render/basic_shaders \
 											-I$(CURDIR)/$(SOURCE)/render -I$(CURDIR)/$(RESOURCES) -I$(CURDIR)/deps/FreeType/include \
 											-I$(CURDIR)/deps/lua/include -I$(CURDIR)/deps/glew/include
-LDLIBS 	  := -w -llua -lmingw32 -lSDL2main -lSDL2 -lfreetype -lopengl32 -lglu32
+LDLIBS 	  := -w -llua -lSDL2main -lSDL2 -lfreetype -lGLU -lglut -lGL
 
 .PHONY: clean, res, shaders, example, deps
 
@@ -33,7 +34,7 @@ clean:
 shaders:
 	@for shader in ${SOURCE}/render/basic_shaders/*.shader;\
 	do \
-		python $(CURDIR)/$(TOOLS)/PGGKBin2h.py $${shader} $${shader/.shader/_shader.h};  \
+		python3 $(CURDIR)/$(TOOLS)/PGGKBin2h.py $${shader} $${shader/.shader/_shader.h};  \
 	done
 
 res: clean, shaders
@@ -41,7 +42,7 @@ res: clean, shaders
     do                                      								\
         for i in $${entry}$(RESOURCES)/*.png;            					\
         do                                  								\
-            python $(CURDIR)/$(TOOLS)/PGGKBin2h.py $${i} $${i/.png/_png.h};  \
+            python3 $(CURDIR)/$(TOOLS)/PGGKBin2h.py $${i} $${i/.png/_png.h};  \
         done                                								\
     done
 
