@@ -14,7 +14,7 @@ IFLAGS    := -I$(CURDIR)/deps/stb -I$(CURDIR)/deps/SDL2/include -I$(CURDIR)/deps
 											-I$(CURDIR)/deps/lua/include -I$(CURDIR)/deps/glew/include
 LDLIBS 	  := -w -llua -lmingw32 -lSDL2main -lSDL2 -lfreetype -lopengl32 -lglu32
 
-.PHONY: clean, res, shaders, example
+.PHONY: clean, res, shaders, example, deps
 
 example:
 	@for entry in ${EXAMPLES};              																		\
@@ -44,6 +44,9 @@ res: clean, shaders
             python $(CURDIR)/$(TOOLS)/PGGKBin2h.py $${i} $${i/.png/_png.h};  \
         done                                								\
     done
+
+deps:
+	shell scripts/dependencies.sh
 
 bullet-hell : $(CURDIR)/examples/bullet-hell/*.cpp $(CURDIR)/$(SOURCE)/*.cpp $(CURDIR)/$(SOURCE)/render/*.cpp $(CURDIR)/$(SOURCE)/GLEW/*.c
 	mkdir -p $(CURDIR)/examples/bullet-hell/build;                                    																				\
