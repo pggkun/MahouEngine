@@ -87,11 +87,15 @@ void Window::run()
   }
   if (keystates[SDL_SCANCODE_Q])
   {
-    yOff += step;
+    yOff = 1;
   }
-  if (keystates[SDL_SCANCODE_E])
+  else if (keystates[SDL_SCANCODE_E])
   {
-    yOff -= step;
+    yOff = -1;
+  }
+  else
+  {
+      yOff = 0.0f;
   }
   if (keystates[SDL_SCANCODE_RIGHT])
   {

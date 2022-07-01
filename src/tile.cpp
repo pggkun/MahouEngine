@@ -27,6 +27,8 @@ Tile::Tile(Material *mat, Camera *cam, glm::vec3 pos, Texture *tex, int x, int y
                      height);
     this->mesh->Initialize();
     AssignMaterial(mat);
+    modelViewMatrix = this->camera->viewMatrix() * this->transform->modelMatrix();
+    this->mesh->modelViewMatrix = this->modelViewMatrix;
 }
 
 Tile::~Tile()
