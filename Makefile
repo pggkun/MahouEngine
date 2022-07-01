@@ -14,21 +14,49 @@ IFLAGS    := -I$(CURDIR)/deps/stb -I$(CURDIR)/deps/SDL2/include -I$(CURDIR)/deps
 											-I$(CURDIR)/deps/lua/include -I$(CURDIR)/deps/glew/include
 LDLIBS 	  := -w -llua -lmingw32 -lSDL2main -lSDL2 -lfreetype -lopengl32 -lglu32
 
-.PHONY: clean, res, shaders, example, deps
+.PHONY: clean, res, shaders, deps, engine
 
-example:
-	@for entry in ${EXAMPLES};              																		\
-    do  																											\
-		mkdir -p $${entry}build;                                    												\
-		$(CC) $${entry}*.cpp $(CURDIR)/$(SOURCE)/*.cpp $(CURDIR)/$(SOURCE)/render/*.cpp $(CURDIR)/$(SOURCE)/GLEW/*.c\
-		$(IFLAGS) -I$${entry}/resources -I$${entry} $(LDFLAGS) $(LDLIBS) -o $${entry}build/game.exe;				\
-    done
+engine: clean, shaders
+	rm -rf $(CURDIR)/build
+	mkdir -p $(CURDIR)/build
+	rm -rf $(CURDIR)/$(SOURCE)/*.o
+	@for cppfile in $(CURDIR)/$(SOURCE)/*.cpp;\
+	do \
+		$(CC) -c $${cppfile} $(IFLAGS) $(LDFLAGS) $(LDLIBS) -o $${cppfile/.cpp/.o};  \
+	done; \
+	cp $(CURDIR)/$(SOURCE)/*.o  $(CURDIR)/build/
+	rm -rf $(CURDIR)/$(SOURCE)/*.o
+
+	@for cpprfile in $(CURDIR)/$(SOURCE)/render/*.cpp; \
+	do \
+		$(CC) -c $${cpprfile} $(IFLAGS) $(LDFLAGS) $(LDLIBS) -o $${cpprfile/.cpp/.o};  \
+	done; \
+	cp $(CURDIR)/$(SOURCE)/render/*.o  $(CURDIR)/build/
+	rm -rf $(CURDIR)/$(SOURCE)/render/*.o
+
+	@for cfile in $(CURDIR)/$(SOURCE)/GLEW/*.c; \
+	do \
+		$(CC) -c $${cfile} $(IFLAGS) $(LDFLAGS) $(LDLIBS) -o $${cfile/.c/.o};  \
+	done; \
+	cp $(CURDIR)/$(SOURCE)/GLEW/*.o  $(CURDIR)/build/
+	rm -rf $(CURDIR)/$(SOURCE)/GLEW/*.o
+
+	mkdir -p $(CURDIR)/build/lib
+	ar rcs $(CURDIR)/build/lib/libMahouEngine.a  $(CURDIR)/build/*.o
+	rm -rf $(CURDIR)/build/*.o
+
+	mkdir -p $(CURDIR)/build/include/render/basic_shaders $(CURDIR)/build/include/GLEW
+	cp $(CURDIR)/$(SOURCE)/*.h $(CURDIR)/build/include/
+	cp $(CURDIR)/$(SOURCE)/render/*.h $(CURDIR)/build/include/render/
+	cp $(CURDIR)/$(SOURCE)/render/basic_shaders/*.h $(CURDIR)/build/include/render/basic_shaders
+	cp $(CURDIR)/$(SOURCE)/GLEW/*.h $(CURDIR)/build/include/GLEW
 
 clean:
 	@echo $(EXAMPLES)
 	-$(foreach var,$(EXAMPLES), rm -rd $(var)/$(BUILD);)
 	-$(foreach var,$(EXAMPLES), rm -rf $(var)/$(RESOURCES)/*_png.h;)
 	rm -rf ${SOURCE}/render/basic_shaders/*.h
+	rm -rf $(CURDIR)/build
 
 shaders:
 	@for shader in ${SOURCE}/render/basic_shaders/*.shader;\
@@ -47,18 +75,3 @@ res: clean, shaders
 
 deps:
 	shell scripts/dependencies.sh
-
-bullet-hell : $(CURDIR)/examples/bullet-hell/*.cpp $(CURDIR)/$(SOURCE)/*.cpp $(CURDIR)/$(SOURCE)/render/*.cpp $(CURDIR)/$(SOURCE)/GLEW/*.c
-	mkdir -p $(CURDIR)/examples/bullet-hell/build;                                    																				\
-	$(CC) $(CURDIR)/examples/bullet-hell/*.cpp $(CURDIR)/$(SOURCE)/*.cpp $(CURDIR)/$(SOURCE)/render/*.cpp $(CURDIR)/$(SOURCE)/GLEW/*.c 								\
-	$(IFLAGS) -I$(CURDIR)/examples/bullet-hell/resources -I$(CURDIR)/examples/bullet-hell $(LDFLAGS) $(LDLIBS) -o $(CURDIR)/examples/bullet-hell/build/game.exe;	\
-
-sprite-render : $(CURDIR)/examples/sprite-render/*.cpp $(CURDIR)/$(SOURCE)/*.cpp $(CURDIR)/$(SOURCE)/render/*.cpp $(CURDIR)/$(SOURCE)/GLEW/*.c
-	mkdir -p $(CURDIR)/examples/sprite-render/build;                                    																				\
-	$(CC) $(CURDIR)/examples/sprite-render/*.cpp $(CURDIR)/$(SOURCE)/*.cpp $(CURDIR)/$(SOURCE)/render/*.cpp $(CURDIR)/$(SOURCE)/GLEW/*.c  								\
-	$(IFLAGS) -I$(CURDIR)/examples/sprite-render/resources -I$(CURDIR)/examples/sprite-render $(LDFLAGS) $(LDLIBS) -o $(CURDIR)/examples/sprite-render/build/game.exe;	\
-
-lua-script : $(CURDIR)/examples/lua-script/*.cpp $(CURDIR)/$(SOURCE)/*.cpp $(CURDIR)/$(SOURCE)/render/*.cpp $(CURDIR)/$(SOURCE)/GLEW/*.c
-	mkdir -p $(CURDIR)/examples/lua-script/build;                                    																			\
-	$(CC) $(CURDIR)/examples/lua-script/*.cpp $(CURDIR)/$(SOURCE)/*.cpp $(CURDIR)/$(SOURCE)/render/*.cpp $(CURDIR)/$(SOURCE)/GLEW/*.c 							\
-	$(IFLAGS) -I$(CURDIR)/examples/lua-script/resources -I$(CURDIR)/examples/lua-script $(LDFLAGS) $(LDLIBS) -o $(CURDIR)/examples/lua-script/build/game.exe;	\
