@@ -1,0 +1,26 @@
+cmake_minimum_required(VERSION 3.20)
+set(OUTPUT "LuaScript")
+set(CMAKE_C_COMPILER "gcc")
+project(${OUTPUT})
+
+file(GLOB cppfiles *.cpp)
+
+add_executable(${OUTPUT} ${cppfiles})
+
+target_include_directories(${OUTPUT} PUBLIC "resources")
+target_include_directories(${OUTPUT} PUBLIC "../../build/include")
+target_include_directories(${OUTPUT} PUBLIC "../../build/include/render")
+target_include_directories(${OUTPUT} PUBLIC "../../build/include/render/basic_shaders")
+target_include_directories(${OUTPUT} PUBLIC "../../deps/stb")
+target_include_directories(${OUTPUT} PUBLIC "../../deps/SDL2/include")
+target_include_directories(${OUTPUT} PUBLIC "../../deps/glm")
+target_include_directories(${OUTPUT} PUBLIC "../../deps/glext/include")
+target_include_directories(${OUTPUT} PUBLIC "../../deps/lua/include")
+target_include_directories(${OUTPUT} PUBLIC "../../deps/FreeType/include")
+
+target_link_libraries(${OUTPUT} PRIVATE "../../../build/lib/MahouEngine")
+target_link_libraries(${OUTPUT} PRIVATE "../../../deps/SDL2/lib/SDL2")
+target_link_libraries(${OUTPUT} PRIVATE "../../../deps/SDL2/lib/SDL2main")
+target_link_libraries(${OUTPUT} PRIVATE "../../../deps/FreeType/lib/freetype")
+target_link_libraries(${OUTPUT} PRIVATE "../../../deps/lua/lib/lua")
+target_link_libraries(${OUTPUT} PRIVATE "../../../deps/glext/lib/glext")

@@ -54,7 +54,7 @@ void Enemy::Update()
     this->BaseUpdate();
 }
 
-void Enemy::SimpleMoveDown()
+/*void Enemy::SimpleMoveDown()
 {
     if (this->coroutine == nullptr)
     {
@@ -84,7 +84,7 @@ void Enemy::SimpleMoveUp()
     {
         this->coroutine = (void(GameEntity::*)()) & SimpleMoveDown;
     }
-}
+}*/
 
 void Enemy::Shoot()
 {

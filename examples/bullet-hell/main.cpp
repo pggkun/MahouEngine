@@ -46,7 +46,7 @@ int main(int ArgCount, char **Args)
 {
     Window *window = new Window;
     window->init(WINDOW_TITLE, WIDTH, HEIGHT);
-    glewInit();
+    // glewInit();
     glViewport(0, 0, WIDTH, HEIGHT);
 
     Shader text_shader(

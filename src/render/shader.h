@@ -1,9 +1,19 @@
 #ifndef SHADER_H
 #define SHADER_H
 
-#ifndef GLEW_STATIC
-#define GLEW_STATIC
-#include "../GLEW/glew.h"
+#ifdef __MINGW32__
+    #ifndef GLEW_STATIC
+    #define GLEW_STATIC
+    #include "../GLEW/glew.h"
+    #endif
+#elif __linux__
+    #ifndef GLEW_STATIC
+    #define GLEW_STATIC
+    #include "../GLEW/glew.h"
+#endif
+#else
+    #include <gl/glcorearb.h>
+    #include <gl/glext.h>
 #endif
 
 #include <glm.hpp>

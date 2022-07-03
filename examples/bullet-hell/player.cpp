@@ -95,7 +95,7 @@ void Player::ShootPattern1()
     // TODO
 }
 
-void Player::FadeOut()
+/*void Player::FadeOut()
 {
     if(this->coroutine == nullptr)
     {
@@ -109,7 +109,7 @@ void Player::FadeOut()
     {
         this->coroutine = nullptr;
     }
-}
+}*/
 
 bool Player::CollisionCircleCircle(glm::vec3 collider, float col_rad)
 {
@@ -117,7 +117,7 @@ bool Player::CollisionCircleCircle(glm::vec3 collider, float col_rad)
 }
  
 
-void Player::FadeIn()
+/*void Player::FadeIn()
 {
     if (this->coroutine == nullptr)
     {
@@ -132,4 +132,4 @@ void Player::FadeIn()
     {
         this->coroutine = nullptr;
     }
-}
+}*/

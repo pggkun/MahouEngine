@@ -9,6 +9,7 @@
 #include <game_object.h>
 
 #include <tileset_sample_png.h>
+#include <memory_pool.h>
 
 #define WINDOW_TITLE "Mahou Engine - Sprite Render"
 #define WIDTH 640
@@ -17,9 +18,11 @@ constexpr auto TAU = glm::two_pi<float>();
 
 int main(int ArgCount, char **Args)
 {
+    MemoryPool memory_pool{1000, sizeof(Window)};
+
     Window *window = new Window;
     window->init(WINDOW_TITLE, WIDTH, HEIGHT);
-    glewInit();
+    // glewInit();
     glViewport(0, 0, WIDTH, HEIGHT);
 
     Camera *mainCam = new Camera();
@@ -45,6 +48,7 @@ int main(int ArgCount, char **Args)
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
     glEnable(GL_BLEND);
     glDepthFunc(GL_ALWAYS);
+
 
     glEnable(GL_DEBUG_OUTPUT);
     while (window->Running)

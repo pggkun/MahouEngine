@@ -18,6 +18,8 @@ if __name__ == '__main__':
     file = open(sys.argv[1], "rb")
     var_declaration = "const unsigned char "
     var_size_declaration = "const unsigned int "
+    sys.argv[1] = sys.argv[1].replace("\\", "/");
+    sys.argv[2] = sys.argv[2].replace("\\", "/");
     var_name = sys.argv[1].split("/")[-1].replace(".","_")
     tmpsize = getSize(file)
     tmpstr = header_comment + var_declaration + var_name + "[" + str(tmpsize) + "] = {"
