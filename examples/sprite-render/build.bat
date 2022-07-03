@@ -1,11 +1,4 @@
-for %%f in (%~dp0resources\*) do (
-  set val=%%f
-  set res=%val:.png=_png.h%
-  @echo %val%
-  @echo %res%
-  python %~dp0../../tools/PGGKBin2h.py %val% %res%
-)
-
+powershell -Command "Get-ChildItem -Path './resources' | Foreach-Object {  python ../../tools/PGGKBin2h.py $_.FullName $_.FullName.Replace('.png', '_png.h') }"
 powershell -Command "rm -r tmp"
 powershell -Command "rm -r build"
 mkdir %~dp0tmp

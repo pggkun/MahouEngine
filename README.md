@@ -14,6 +14,7 @@ Simple 2D/3D game engine based on SDL2/OpenGL
 - [x] Materials
 - [x] Instancing
 - [x] Lua scripting support
+- [x] Tileset
 - [ ] UI Image layer
 - [ ] Collision Circle - Rect
 - [ ] Collision Rect - Rect (AABB)
@@ -21,10 +22,11 @@ Simple 2D/3D game engine based on SDL2/OpenGL
 
 ## Dependencies
 
-For Windows users, install [msys2](https://www.msys2.org/) to enable make.
+For Windows users, install [cmake](https://cmake.org/), then run the `dependencies.bat` file in the scripts folder to download and compile all dependencies needed.
 
 ## Build
 
-At your shell, run `make res` to build all resources and then run `make` to compile all the examples inside the [examples](examples/) folder.
+Run the `build.bat` file at the root of the project to compile the engine static library.
+To compile any example, just run the `build.bat` of the example.
 
 ![movement](.github/screen.png)
