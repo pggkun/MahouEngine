@@ -37,54 +37,22 @@ Enemy::~Enemy()
 
 void Enemy::Update()
 {   timer += GameTime::delta_time;
-    if(timer >= 10.0f)
+    if(timer >= 2.5f)
     {
         
         timer = 0.0;
         delay_timer = 0.0f;
         delay_counter = 0;
 
-        ShootMultiDirection(0.05f,glm::vec3{0,0,0});// glm::vec3{(rand() % 2 + 0) - 1, (rand() % 2 + 0)  -1 ,0});
+        ShootMultiDirection(1.5f, glm::vec3{(rand() % 2 + 0) - 1, (rand() % 2 + 0) - 1, 0});
     }
 
     if (this->bullet_layer >= 0.0505f + 0.001 * directions.size())
         this->bullet_layer = 0.0505f;
     
-    this->sprite->UpdateAnimation();
+    //this->sprite->UpdateAnimation();
     this->BaseUpdate();
 }
-
-/*void Enemy::SimpleMoveDown()
-{
-    if (this->coroutine == nullptr)
-    {
-        this->coroutine = (void(GameEntity::*)()) & SimpleMoveDown;
-    }
-    if (this->transform->position.y > -1.0f)
-    {
-        this->transform->position.y -= 1.0f * GameTime::delta_time;
-    }
-    else
-    {
-        this->coroutine = (void(GameEntity::*)()) & SimpleMoveUp;
-    }
-}
-
-void Enemy::SimpleMoveUp()
-{
-    if (this->coroutine == nullptr)
-    {
-        this->coroutine = (void(GameEntity::*)()) & SimpleMoveUp;
-    }
-    if (this->transform->position.y < 1.0f)
-    {
-        this->transform->position.y += 1.0f * GameTime::delta_time;
-    }
-    else
-    {
-        this->coroutine = (void(GameEntity::*)()) & SimpleMoveDown;
-    }
-}*/
 
 void Enemy::Shoot()
 {

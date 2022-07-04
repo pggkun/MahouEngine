@@ -15,12 +15,14 @@ ProjectileObject::~ProjectileObject()
 
 void ProjectileObject::RemoveMaterial()
 {
-    for (std::list<std::pair<Transform *, Mesh *>>::iterator it = material->objectsToDraw.begin(); it != material->objectsToDraw.end(); ++it)
+    for (std::list<std::pair<Transform *, Mesh *>>::iterator it = material->objectsToDraw.begin(); it != material->objectsToDraw.end(); /**/)
     {
         if ((*it).second == mesh)
         {
-            material->objectsToDraw.erase(it);
+            it = material->objectsToDraw.erase(it);
         }
+        else
+            it = next(it,1);
     }
     material = nullptr;
 }
@@ -60,7 +62,7 @@ void ProjectileObject::Initialize()
     transform = new Transform();
 }
 
-void ProjectileObject::Move()
+inline void ProjectileObject::Move()
 {
     timer += GameTime::delta_time;
     float sx = origin.x + (velocity.x * timer) + (0.5f * acceleration.x * (timer * timer));

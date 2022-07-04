@@ -8,7 +8,7 @@ using std::list;
 class ProjectileScene
 {
 private:
-    list<ProjectileObject *>::iterator next;
+    list<ProjectileObject *>::iterator prox;
     list<ProjectileObject *>::iterator it;
 
 public:

@@ -1,4 +1,5 @@
-powershell -Command "Get-ChildItem -Path './resources' | Foreach-Object {  python ../../tools/PGGKBin2h.py $_.FullName $_.FullName.Replace('.png', '_png.h') }"
+powershell -Command "rm ./resources/*.h"
+powershell -Command "Get-ChildItem './resources' -filter '*.png'  | Foreach-Object {  python ../../tools/PGGKBin2h.py $_.FullName $_.FullName.Replace('.png', '_png.h') }"
 powershell -Command "rm -r tmp"
 powershell -Command "rm -r build"
 mkdir %~dp0tmp

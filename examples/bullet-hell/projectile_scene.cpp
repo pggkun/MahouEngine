@@ -19,10 +19,10 @@ void ProjectileScene::Add(ProjectileObject *obj)
 
 void ProjectileScene::Update()
 {
-    next = entities.begin();
-    while (next != entities.end())
+    prox = entities.begin();
+    while (prox != entities.end())
     {
-        it = next++;
+        it = prox++;
         (*it)->CustomUpdate();
         if ((*it)->transform->position.x > 5.0f || (*it)->transform->position.x < -5.0f || (*it)->transform->position.y > 4.0f || (*it)->transform->position.y < -4.0f)
         {
@@ -41,24 +41,18 @@ ProjectileObject *ProjectileScene::GetFromInactive()
     return inactive;
 }
 
-void ProjectileScene::Begin()
+inline void ProjectileScene::Begin()
 {
-    next = entities.begin();
+    prox = entities.begin();
 }
 
-ProjectileObject *ProjectileScene::Next()
+inline ProjectileObject *ProjectileScene::Next()
 {
-    if (next != entities.end())
+    if (prox != entities.end())
     {
-        it = next++;
+        it = prox++;
         return *it;
     }
     else
         return nullptr;
-}
-
-void ProjectileScene::Remove()
-{
-    memory_pool.Delete(*it);
-    entities.erase(it);
 }

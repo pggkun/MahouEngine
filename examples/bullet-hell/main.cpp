@@ -129,7 +129,7 @@ int main(int ArgCount, char **Args)
     glDepthFunc(GL_ALWAYS);
 
     TextRenderer *text1 = new TextRenderer("../resources/VT323-Regular.ttf", 26);
- 
+
     Texture *texture = new Texture(dummytex_png, dummytex_png_size);
     Material *spriteDefault = new Material();
     spriteDefault->SetProperties(&shader, texture, mainCam, {1, 1, 1, 1});
@@ -152,7 +152,7 @@ int main(int ArgCount, char **Args)
 
         background->Update();
         background->Draw();
-
+        window->run();
         bulletScene->Update();
         red_bullets->SetupMatrices();
         red_bullets->Draw();
