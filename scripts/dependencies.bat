@@ -79,5 +79,17 @@ move %~dp0lua\include %~dp0deps\lua\
 del /s lua.zip
 @rd /S /Q %~dp0lua
 
+powershell -Command "(New-Object Net.WebClient).DownloadFile('https://github.com/ocornut/imgui/tarball/master', 'imgui.tar.gz')"
+tar -xvf imgui.tar.gz
+mkdir %~dp0deps\ImGUI
+powershell -Command "cp *imgui*/*.h deps/ImGUI/"
+powershell -Command "cp *imgui*/*.cpp deps/ImGUI/"
+powershell -Command "cp *imgui*/*.hpp deps/ImGUI/"
+
+powershell -Command "cp *imgui*/backends/*sdl* deps/ImGUI/"
+powershell -Command "cp *imgui*/backends/*opengl* deps/ImGUI/"
+del /s imgui.tar.gz
+powershell -Command "rm -r *imgui*"
+
 powershell -Command "cp -r deps ../deps"
 powershell -Command "rm -r deps"

@@ -38,7 +38,7 @@ int main(int ArgCount, char **Args)
     Material *spriteDefault = new Material();
     spriteDefault->SetProperties(&shader, texture, mainCam, {1, 1, 1, 1});
     GameObject *logo = new GameObject();
-    logo->transform->scaleAmount = glm::vec3(6.5,6.5,1);
+    logo->transform->scaleAmount = glm::vec3(4,4,1);
     logo->camera = mainCam;
     logo->SetupPlane(0, 0, 1, 1);
     logo->MoveTo(0, 0);
