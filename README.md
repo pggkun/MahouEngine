@@ -31,4 +31,4 @@ For Windows users, install [cmake](https://cmake.org/), then run the `dependenci
 Run the `build.bat` file at the root of the project to compile the engine static library.
 To compile any example, just run the `build.bat` of the example.
 
-![movement](.github/screen.png)
+![movement](.github/screen-1.png)
