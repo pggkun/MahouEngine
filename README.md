@@ -1,3 +1,5 @@
+![logo](.github/transparent-logo.png)
+
 # Mahou Engine
 Simple 2D/3D game engine based on SDL2/OpenGL
 

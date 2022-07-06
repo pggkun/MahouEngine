@@ -23,6 +23,7 @@ void ProjectileScene::Update()
     while (prox != entities.end())
     {
         it = prox++;
+        (*it)->transform->scaleAmount = glm::vec3(scale, scale, 1);
         (*it)->CustomUpdate();
         if ((*it)->transform->position.x > 5.0f || (*it)->transform->position.x < -5.0f || (*it)->transform->position.y > 4.0f || (*it)->transform->position.y < -4.0f)
         {

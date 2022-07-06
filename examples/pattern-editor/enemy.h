@@ -32,6 +32,7 @@ public:
     AnimatedSprite *bullet_sprite;
     float hitbox_radio;
     float dir_acc = 0.0f;
+    float b_delay = 0.3f;
 
     Material *bullet_material;
     ProjectileScene *currScene;

@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.20)
-set(OUTPUT "patterns")
+set(OUTPUT "MahouEditor")
 set(CMAKE_C_COMPILER "gcc")
 project(${OUTPUT})
 

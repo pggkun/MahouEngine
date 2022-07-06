@@ -1,5 +1,6 @@
 #ifndef _TEXTURE_H_
 #define _TEXTURE_H_
+#include "shader.h"
 
 class Texture
 {
@@ -9,6 +10,8 @@ class Texture
         ~Texture();
         unsigned char *image;
         int width, height, nchan;
+        GLuint textureID;
+        void GenerateTexture(GLint filter);
 };
 
 #endif

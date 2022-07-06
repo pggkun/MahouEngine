@@ -17,6 +17,7 @@ public:
 
     void Add(ProjectileObject *entity);
     void Update();
+    float scale = 0.25f;
 
     list<ProjectileObject *> entities;
     list<ProjectileObject *> inactive_entities;
@@ -27,6 +28,6 @@ public:
 
     ProjectileObject *GetFromInactive();
 
-    MemoryPool memory_pool{1000, sizeof(ProjectileObject)};
+    MemoryPool memory_pool{2000, sizeof(ProjectileObject)};
 };
 #endif
