@@ -17,10 +17,10 @@ Simple 2D/3D game engine based on SDL2/OpenGL
 - [x] Instancing
 - [x] Lua scripting support
 - [x] Tileset
+- [x] 3D Models
 - [ ] UI Image layer
 - [ ] Collision Circle - Rect
 - [ ] Collision Rect - Rect (AABB)
-- [ ] 3D Models
 
 ## Dependencies
 
