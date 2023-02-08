@@ -1,9 +1,10 @@
 cmake_minimum_required(VERSION 3.20)
 set(OUTPUT "3DRender")
 set(CMAKE_C_COMPILER "gcc")
+set(CMAKE_CXX_STANDARD 17)
 project(${OUTPUT})
 
-add_executable(${OUTPUT} WIN32 main.cpp)
+add_executable(${OUTPUT} main.cpp)
 
 target_include_directories(${OUTPUT} PUBLIC "resources")
 target_include_directories(${OUTPUT} PUBLIC "../../build/include")
