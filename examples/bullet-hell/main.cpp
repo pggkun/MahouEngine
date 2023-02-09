@@ -126,7 +126,7 @@ int main(int ArgCount, char **Args)
     glEnable(GL_DEPTH_TEST);
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
     glEnable(GL_BLEND);
-    glDepthFunc(GL_ALWAYS);
+    glDepthFunc(GL_LEQUAL);
 
     TextRenderer *text1 = new TextRenderer("../resources/VT323-Regular.ttf", 26);
 
@@ -153,19 +153,18 @@ int main(int ArgCount, char **Args)
         background->Update();
         background->Draw();
         window->run();
-        bulletScene->Update();
-        red_bullets->SetupMatrices();
-        red_bullets->Draw();
-        
-        window->run();
+
         if (window->Fire1)
         {
             ProjectileObject *bullet;
             if (bulletScene->inactive_entities.size() > 0)
                 bullet = bulletScene->GetFromInactive();
-            bullet->Load(red_bullets, mainCam, glm::vec3{1, 0, 0}, glm::vec3{0, 0, 0}, glm::vec3{0, 0, 0});
+            bullet->Load(red_bullets, mainCam, glm::vec3{3, 0, 0}, glm::vec3{0, 0, 0},  glm::vec3{player->transform->position.x + 0.4f, player->transform->position.y, 0});
             bulletScene->Add(bullet);
         }
+
+        bulletScene->Update();
+        red_bullets->SetupMatrices();
 
         if (window->Fire2)
         {
@@ -205,6 +204,7 @@ int main(int ArgCount, char **Args)
         enemy->Draw();
         player->Draw();
         player->DrawLife();
+        red_bullets->Draw();
 
         sakura_entity->Draw();
         sakura_entity2->Draw();

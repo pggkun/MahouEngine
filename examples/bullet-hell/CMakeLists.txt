@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.20)
 set(OUTPUT "BulletHell")
-set(CMAKE_CXX_FLAGS "-std=c++17 /EHsc")
+set(CMAKE_CXX_STANDARD 17)
 project(${OUTPUT})
 
 file(GLOB cppfiles *.cpp)
