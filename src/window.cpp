@@ -3,15 +3,15 @@
 
 void Window::init(const char *title, u32 Width, u32 Heigth)
 {
-  this->WindowFlags = SDL_WINDOW_OPENGL;
-  this->Window = SDL_CreateWindow(title, 0, 0, Width, Heigth, WindowFlags);
-  SDL_SetWindowPosition(this->Window, SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED);
-  assert(this->Window);
-  this->Context = SDL_GL_CreateContext(this->Window);
-  this->renderer = SDL_CreateRenderer(this->Window, -1, SDL_RENDERER_ACCELERATED);
+    this->WindowFlags = SDL_WINDOW_OPENGL | SDL_WINDOW_RESIZABLE;
+    this->Window = SDL_CreateWindow(title, 0, 0, Width, Heigth, WindowFlags);
+    SDL_SetWindowPosition(this->Window, SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED);
+    assert(this->Window);
+    this->Context = SDL_GL_CreateContext(this->Window);
+    this->renderer = SDL_CreateRenderer(this->Window, -1, SDL_RENDERER_ACCELERATED);
 
-  this->Running = 1;
-  this->FullScreen = 0;
+    this->Running = 1;
+    this->FullScreen = 0;
 }
 
 void Window::run()

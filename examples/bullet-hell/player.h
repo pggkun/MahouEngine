@@ -1,6 +1,7 @@
 #ifndef _PLAYER_H_
 #define _PLAYER_H_
 #include <game_entity.h>
+#include <algorithm>
 #include "projectile_scene.h"
 
 class Player : public GameEntity
@@ -31,8 +32,6 @@ public:
     int hp;
 
     void Move(float x, float y, float z, float speed);
-    void Shoot();
-    void ShootPattern1();
     void FadeIn();
     void FadeOut();
     void DrawLife();

@@ -114,6 +114,10 @@ int main(int ArgCount, char **Args)
     Material *red_bullets = new Material;
     red_bullets->SetProperties(&shader, bullet_red, mainCam, {1, 1, 1, 1});
 
+    Texture *bullet_blue = new Texture(bullet1_png, bullet1_png_size);
+    Material *blue_bullets = new Material;
+    blue_bullets->SetProperties(&shader, bullet_blue, mainCam, {1, 1, 1, 1});
+
     enemy->bullet_material = red_bullets;
 
     for (int i = 0; i < 800; i++)
@@ -159,17 +163,13 @@ int main(int ArgCount, char **Args)
             ProjectileObject *bullet;
             if (bulletScene->inactive_entities.size() > 0)
                 bullet = bulletScene->GetFromInactive();
-            bullet->Load(red_bullets, mainCam, glm::vec3{3, 0, 0}, glm::vec3{0, 0, 0},  glm::vec3{player->transform->position.x + 0.4f, player->transform->position.y, 0});
+            bullet->Load(blue_bullets, mainCam, glm::vec3{6, 0, 0}, glm::vec3{0, 0, 0},  glm::vec3{player->transform->position.x + 0.4f, player->transform->position.y, 0});
             bulletScene->Add(bullet);
         }
 
         bulletScene->Update();
         red_bullets->SetupMatrices();
-
-        if (window->Fire2)
-        {
-            player->ShootPattern1();
-        }
+        blue_bullets->SetupMatrices();
 
         if (window->Shift)
         {
@@ -204,8 +204,9 @@ int main(int ArgCount, char **Args)
         enemy->Draw();
         player->Draw();
         player->DrawLife();
+        blue_bullets->Draw();
         red_bullets->Draw();
-
+        
         sakura_entity->Draw();
         sakura_entity2->Draw();
 
@@ -216,8 +217,8 @@ int main(int ArgCount, char **Args)
         std::string mmr = "Draw Calls: " + std::to_string(GameTime::draw_calls);
         std::string playerhit = "player hp: " + std::to_string(player->hp);
         std::string fpss = std::to_string((int)(1.0 / GameTime::delta_time)) + " FPS";
-        std::string blts = "Active Bullets: " + std::to_string(bulletScene->entities.size()) + " Inactive Bullets: " + std::to_string(bulletScene->inactive_entities.size());
-        
+        // std::string blts = "Active Bullets: " + std::to_string(bulletScene->entities.size()) + " Inactive Bullets: " + std::to_string(bulletScene->inactive_entities.size());
+        std::string blts = std::to_string(player->transform->position.x)+ ", "+ std::to_string(player->transform->position.y)+", "+ std::to_string(player->transform->position.z);
         text1->RenderText(text_shader, fpss.c_str(), 25.0f, 310.0f, 1.0f, glm::vec3(1.0, 1.0f, 1.0f));
         text1->RenderText(text_shader, blts.c_str(), 25.0f, 290.0f, 1.0f, glm::vec3(1.0, 1.0f, 1.0f));
     

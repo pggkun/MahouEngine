@@ -51,6 +51,10 @@ void Player::Move(float x, float y, float z, float speed)
     this->transform->position = glm::vec3{this->transform->position.x + (x * s),
                                           this->transform->position.y + (y * s),
                                           this->transform->position.z + (z * s)};
+
+    this->transform->position = glm::vec3{(std::clamp(this->transform->position.x, -3.68f, 3.76f)),
+                                          (std::clamp(this->transform->position.y, -2.11f, 1.83f)),
+                                          this->transform->position.z};
 }
 
 void Player::Update()
@@ -65,6 +69,7 @@ void Player::Update()
             (*it)->RemoveMaterial();
             currScene->inactive_entities.push_back(*it);
             it = currScene->entities.erase(it);
+            break;
         }
     }
 
@@ -83,16 +88,6 @@ void Player::DrawLife()
 {
     if (focus)
         this->life_vfx->Draw();
-}
-
-void Player::Shoot()
-{
-    //TODO
-}
-
-void Player::ShootPattern1()
-{
-    // TODO
 }
 
 bool Player::CollisionCircleCircle(glm::vec3 collider, float col_rad)

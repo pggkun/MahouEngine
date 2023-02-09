@@ -22,7 +22,9 @@ void ProjectileObject::RemoveMaterial()
             it = material->objectsToDraw.erase(it);
         }
         else
+        {
             it = next(it,1);
+        }
     }
     material = nullptr;
 }
