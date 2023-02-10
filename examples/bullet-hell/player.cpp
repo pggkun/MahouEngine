@@ -14,24 +14,18 @@ void Player::Start()
     this->transform->angle = 0.0f;
     this->transform->scaleAmount = glm::vec3{2.5f, 2.5f, 1.0f};
 
-    this->sprite = new AnimatedSprite(4, 1, 0.08f, sakfly_png, sakfly_png_size);
-    this->sprite->PushAnimation(std::vector<int>{0, 1, 2, 3});
-    this->sprite->SwitchAnimation(1, 0.08f);
-    this->bullet_layer = 0.001f;
-    this->BaseStart();
+    texture = new Texture(sakfly_png, sakfly_png_size);
+    material = new Material();
+    material->SetProperties(shader, texture, camera, {1, 1, 1, 1});
+
+    SetupPlane(0, 0, 1, 1);
+    AssignMaterial(material);
+    AssignSprite(4, 1);
+    sprite->AddAnimation(std::vector<int>{0, 1, 2, 3});
+    sprite->SwitchAnimation(1, 0.08f);
+
     global_count++;
     this->self_count = global_count;
-
-    AnimatedSprite *b2 = new AnimatedSprite(1, 1, 0.1f, bulet2_png, bulet2_png_size);
-    Transform *b2t = new Transform();
-    b2t->position = glm::vec3{0.0f, 0.0f, 0.0f};
-    b2t->rotationAxis = glm::vec3{0.0f, 0.0f, -1.0f};
-    b2t->angle = 0.0f;
-    b2t->scaleAmount = glm::vec3{0.2f, 0.2f, 1.0f};
-    this->life_vfx = new GameEntity(b2, this->camera);
-    b2->sprite_color = glm::vec4{1.0f, 0.7f, 0.7f, 1};
-    this->life_vfx->transform = b2t;
-    this->life_vfx->Start();
 
     hp = 100;
     hitbox_radio = 0.085f;
@@ -73,21 +67,19 @@ void Player::Update()
         }
     }
 
+    shader->use();
+    shader->setMat4("projMtx", camera->projMatrix());
+    shader->setVec4("color", {1, 1, 1, 1});
 
-    //this->sprite->UpdateAnimation();
     if(this->bullet_layer >= 0.05f) this->bullet_layer = 0.0f;
     Move(-x_input, y_input, 0.0f, 5.0f * GameTime::delta_time);
     this->BaseUpdate();
-
-    life_vfx->transform->position = this->transform->position;
-    this->life_vfx->Update();
     
 }
 
 void Player::DrawLife()
 {
-    if (focus)
-        this->life_vfx->Draw();
+
 }
 
 bool Player::CollisionCircleCircle(glm::vec3 collider, float col_rad)

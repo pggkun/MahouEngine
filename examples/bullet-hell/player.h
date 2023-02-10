@@ -1,23 +1,27 @@
 #ifndef _PLAYER_H_
 #define _PLAYER_H_
-#include <game_entity.h>
+#include <game_object.h>
 #include <algorithm>
 #include "projectile_scene.h"
+#include <sprite_single_vertex_shader.h>
+#include <sprite_single_frag_shader.h>
 
-class Player : public GameEntity
+class Player : public GameObject
 {
 protected:
     static int global_count;
     int self_count;
     glm::mat4 modelViewMatrix;
     float bullet_layer;
-    GameEntity *life_vfx;
+    GameObject *life_vfx;
+    Texture *texture;
 
 public:
-    Player(AnimatedSprite *spr, Camera *cam) : GameEntity(spr, cam) {}
+    Player() : GameObject() {}
     ~Player();
 
     ProjectileScene *currScene;
+    Shader *shader;
     void Start() override;
     void Update() override;
     float x_input;

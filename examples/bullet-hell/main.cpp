@@ -28,8 +28,8 @@
 #include <lua_object.h>
 
 #define WINDOW_TITLE "Mahou Engine - Bullet Hell"
-#define WIDTH 640
-#define HEIGHT 360
+#define WIDTH 1280
+#define HEIGHT 720
 
 constexpr auto TAU = glm::two_pi<float>();
 
@@ -54,6 +54,14 @@ int main(int ArgCount, char **Args)
         reinterpret_cast<const char*>(text_frag_shader), nullptr);
     text_shader.use();
 
+    Shader shader(
+        reinterpret_cast<const char *>(sprite_inst_vert_shader),
+        reinterpret_cast<const char *>(sprite_inst_frag_shader), nullptr);
+
+    Shader player_shader(
+        reinterpret_cast<const char *>(sprite_inst_vert_shader),
+        reinterpret_cast<const char *>(sprite_inst_frag_shader), nullptr);
+
     Camera *mainCam = new Camera();
     mainCam->aperture = 45.0f * TAU / 360.0f;
     mainCam->ratio = 1280.0f / 720.0f;
@@ -63,7 +71,9 @@ int main(int ArgCount, char **Args)
     mainCam->center = glm::vec3{0.0f, 0.0f, 0.0f};
     mainCam->up = glm::vec3{0.0f, 1.0f, 0.0f};
 
-    Player *player = new Player(nullptr, mainCam);
+    Player *player = new Player();
+    player->camera = mainCam;
+    player->shader = &player_shader;
     player->Start();
 
     ProjectileScene *bulletScene = new ProjectileScene();
@@ -80,11 +90,11 @@ int main(int ArgCount, char **Args)
     sakura_entity->Start();
     sakura_entity->sprite->sprite_color = glm::vec4{0.9f, 0.9f, 0.9f, 1.0f};
 
-    Enemy *enemy = new Enemy(nullptr, mainCam);
-    enemy->Start();
-    enemy->player = player;
+    // Enemy *enemy = new Enemy(nullptr, mainCam);
+    // enemy->Start();
+    // enemy->player = player;
 
-    enemy->currScene = bulletScene;
+    // enemy->currScene = bulletScene;
 
     AnimatedSprite *sakura2 = new AnimatedSprite(1, 1, 0.1f, sakura1_png, sakura1_png_size);
     Transform *sakura_tr2 = new Transform();
@@ -106,10 +116,6 @@ int main(int ArgCount, char **Args)
     background->transform = bgt;
     background->Start();
 
-    Shader shader(
-        reinterpret_cast<const char *>(sprite_inst_vert_shader),
-        reinterpret_cast<const char *>(sprite_inst_frag_shader), nullptr);
-
     Texture *bullet_red = new Texture(bulet2_png, bulet2_png_size);
     Material *red_bullets = new Material;
     red_bullets->SetProperties(&shader, bullet_red, mainCam, {1, 1, 1, 1});
@@ -118,7 +124,7 @@ int main(int ArgCount, char **Args)
     Material *blue_bullets = new Material;
     blue_bullets->SetProperties(&shader, bullet_blue, mainCam, {1, 1, 1, 1});
 
-    enemy->bullet_material = red_bullets;
+    // enemy->bullet_material = red_bullets;
 
     for (int i = 0; i < 800; i++)
     {
@@ -183,7 +189,7 @@ int main(int ArgCount, char **Args)
         player->x_input = window->xOff;
         player->y_input = window->zOff;
 
-        enemy->Update();
+        // enemy->Update();
         player->Update();
 
         sakura_entity->transform->position.x -= 2.5f * GameTime::delta_time;
@@ -201,9 +207,11 @@ int main(int ArgCount, char **Args)
         sakura_entity->Update();
         sakura_entity2->Update();
 
-        enemy->Draw();
-        player->Draw();
-        player->DrawLife();
+        // enemy->Draw();
+        player->material->SetupMatrices();
+        player->material->Draw();
+        // player->Draw();
+        // player->DrawLife();
         blue_bullets->Draw();
         red_bullets->Draw();
         
@@ -232,7 +240,7 @@ int main(int ArgCount, char **Args)
 
     delete spriteDefault;
     delete player;
-    delete enemy;
+    // delete enemy;
     delete sakura_entity;
     delete sakura_entity2;
     delete window;

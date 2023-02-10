@@ -60,6 +60,8 @@ int main(int ArgCount, char **Args)
     Texture *sak_tex = new Texture(sakfly_png, sakfly_png_size);
     Material *spriteDefault = new Material();
     spriteDefault->SetProperties(&instanced, sak_tex, mainCam, {1, 1, 1, 1});
+
+
     GameObject *player = new GameObject();
     player->camera = mainCam;
     player->SetupPlane(0, 0, 1, 1);

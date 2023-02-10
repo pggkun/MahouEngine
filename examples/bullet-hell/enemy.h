@@ -1,6 +1,7 @@
 #ifndef _ENEMY_H_
 #define _ENEMY_H_
 #include "player.h"
+#include <game_entity.h>
 #include "projectile_scene.h"
 #include "projectile_object.h"
 #include <material.h>
