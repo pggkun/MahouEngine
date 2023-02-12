@@ -1,26 +1,23 @@
 ![logo](.github/transparent-logo.png)
 
 # Mahou Engine
-Simple 2D/3D game engine based on SDL2/OpenGL
+Simple 2D/3D game engine based on OpenGL focused on Shoot 'em up games for study purpose.
 
 - [x] Sprite render
 - [x] Sprite Animation
 - [x] Sprites with Alpha
-- [x] Affine transformation
-- [x] Coroutine
-- [x] Camera
-- [x] Game entities
-- [x] Scene
 - [x] Text render
-- [x] Collision Circle - Circle
+- [x] Camera
+- [x] Collision
 - [x] Materials
 - [x] Instancing
 - [x] Lua scripting support
 - [x] Tileset
 - [x] 3D Models
-- [ ] UI Image layer
-- [ ] Collision Circle - Rect
-- [ ] Collision Rect - Rect (AABB)
+- [ ] Post-processing
+- [ ] Audio (BGM)
+- [ ] Audio (SFX)
+- [ ] Scene Editor
 
 ## Dependencies
 
@@ -31,4 +28,5 @@ For Windows users, install [cmake](https://cmake.org/), then run the `dependenci
 Run the `build.bat` file at the root of the project to compile the engine static library.
 To compile any example, just run the `build.bat` of the example.
 
+![movement](.github/b_hell_example.gif)
 ![movement](.github/screen-1.png)

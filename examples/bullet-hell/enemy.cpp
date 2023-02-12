@@ -65,7 +65,7 @@ void Enemy::Update()
     }
     
     timer += GameTime::delta_time;
-    if(timer >= 1.5f)
+    if(timer >= 2.5f)
     {
         
         timer = 0.0;
@@ -81,7 +81,7 @@ void Enemy::Update()
     shader->use();
     shader->setMat4("projMtx", camera->projMatrix());
     shader->setVec4("color", current_color);
-    // SimpleMove();
+    SimpleMove();
     this->BaseUpdate();
 }
 

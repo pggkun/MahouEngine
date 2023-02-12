@@ -27,6 +27,7 @@
 
 #include <moon_png.h>
 #include <mesh_3d.h>
+#include <ui_png.h>
 
 #define WINDOW_TITLE "Mahou Engine - Bullet Hell"
 #define WIDTH 640
@@ -64,6 +65,10 @@ int main(int ArgCount, char **Args)
         reinterpret_cast<const char *>(sprite_inst_frag_shader), nullptr);
 
     Shader enemy_shader(
+        reinterpret_cast<const char *>(sprite_inst_vert_shader),
+        reinterpret_cast<const char *>(sprite_inst_frag_shader), nullptr);
+
+    Shader ui_shader(
         reinterpret_cast<const char *>(sprite_inst_vert_shader),
         reinterpret_cast<const char *>(sprite_inst_frag_shader), nullptr);
 
@@ -131,6 +136,17 @@ int main(int ArgCount, char **Args)
     Material *blue_bullets = new Material;
     blue_bullets->SetProperties(&shader, bullet_blue, mainCam, {1, 1, 1, 1});
 
+    Texture *ui = new Texture(ui_png, ui_png_size);
+    Material *ui_mat = new Material;
+    ui_mat->SetProperties(&ui_shader, ui, mainCam, {1, 1, 1, 1});
+    GameObject *ui_obj = new GameObject();
+    ui_obj->camera = mainCam;
+    ui_obj->SetupPlane(0, 0, 1, 1);
+    ui_obj->MoveTo(0, 0.218f, 5.328f);
+
+    ui_obj->AssignMaterial(ui_mat);
+    ui_obj->AssignSprite(1, 1);
+
     enemy->bullet_material = red_bullets;
 
     for (int i = 0; i < 800; i++)
@@ -160,7 +176,7 @@ int main(int ArgCount, char **Args)
     while (window->Running)
     {
         uint64_t startTime = SDL_GetPerformanceCounter();
-        SDL_GL_SetSwapInterval(0);
+        SDL_GL_SetSwapInterval(1);
         glClearColor(106.0F / 255.0F, 102.0F / 255.0F, 125.0F / 255.0F, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
@@ -170,10 +186,8 @@ int main(int ArgCount, char **Args)
 
         background->Update();
         background->Draw();
-        window->run();        
-        // mesho.transform.position += glm::vec3{window->xOff * 0.005, window->yOff * 0.005, window->zOff * 0.005f};
-        // // mesho.transform.angle += window->xOff * 0.05f;
-        
+        window->run();    
+            
         if (window->Fire1)
         {
             ProjectileObject *bullet;
@@ -230,19 +244,20 @@ int main(int ArgCount, char **Args)
         sakura_entity->Draw();
         sakura_entity2->Draw();
 
+        ui_shader.use();
+        ui_shader.setMat4("projMtx", mainCam->projMatrix());
+        ui_shader.setVec4("color", {1, 1, 1, 1});
+        ui_obj->Update();
+        ui_mat->SetupMatrices();
+        ui_mat->Draw();
+
         window->Fire1 = false;
         window->Fire2 = false;
         window->xOff = 0.0f;
         window->zOff = 0.0f;
-        std::string mmr = "";
-        std::string playerhit = "player hp: " + std::to_string(player->hp);
         std::string fpss = std::to_string((int)(1.0 / GameTime::delta_time)) + " FPS";
-        // std::string blts = "Active Bullets: " + std::to_string(bulletScene->entities.size()) + " Inactive Bullets: " + std::to_string(bulletScene->inactive_entities.size());
-        std::string blts = std::to_string(player->transform->position.x) + ", " + std::to_string(player->transform->position.y) + ", " + std::to_string(player->transform->position.z);
         text1->RenderText(text_shader, fpss.c_str(), 25.0f, 310.0f, 1.0f, glm::vec3(1.0, 1.0f, 1.0f));
-        text1->RenderText(text_shader, blts.c_str(), 25.0f, 290.0f, 1.0f, glm::vec3(1.0, 1.0f, 1.0f));
-    
-        text1->RenderText(text_shader, mmr.c_str(), 25.0f, 270.0f, 1.0f, glm::vec3(1.0, 1.0f, 1.0f));
+
         GameTime::draw_calls = 0;
         SDL_GL_SwapWindow(window->Window);
         uint64_t currTime = SDL_GetPerformanceCounter();
