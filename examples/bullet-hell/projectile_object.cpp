@@ -29,14 +29,14 @@ void ProjectileObject::RemoveMaterial()
     material = nullptr;
 }
 
-void ProjectileObject::Load(Material *mat, Camera *cam, glm::vec3 vel, glm::vec3 acc, glm::vec3 pos)
+void ProjectileObject::Load(Material *mat, Camera *cam, glm::vec3 vel, glm::vec3 acc, glm::vec3 pos, bool f_player)
 {
     this->camera = cam;
 
     transform->position = pos;
     transform->rotationAxis = glm::vec3{0.0f, 0.0f, -1.0f};
     transform->angle = 0.0f;
-    transform->scaleAmount = glm::vec3{0.25f, 0.25f, 1.0f};
+    transform->scaleAmount = glm::vec3{0.175f, 0.175f, 1.0f};
     origin = pos;
     velocity = vel;
     acceleration = acc;
@@ -44,19 +44,21 @@ void ProjectileObject::Load(Material *mat, Camera *cam, glm::vec3 vel, glm::vec3
 
     SetupPlane(0, 0, 1, 1);
     AssignMaterial(mat);
+    from_player = f_player;
     //AssignSprite(1, 1);
 }
 
-void ProjectileObject::SoftLoad(glm::vec3 vel, glm::vec3 acc, glm::vec3 pos)
+void ProjectileObject::SoftLoad(glm::vec3 vel, glm::vec3 acc, glm::vec3 pos, bool f_player)
 {
     transform->position = pos;
     transform->rotationAxis = glm::vec3{0.0f, 0.0f, -1.0f};
     transform->angle = 0.0f;
-    transform->scaleAmount = glm::vec3{0.25f, 0.25f, 1.0f};
+    transform->scaleAmount = glm::vec3{0.175f, 0.175f, 1.0f};
     origin = pos;
     velocity = vel;
     acceleration = acc;
     timer = 0.0f;
+    from_player = f_player;
 }
 
 void ProjectileObject::Initialize()

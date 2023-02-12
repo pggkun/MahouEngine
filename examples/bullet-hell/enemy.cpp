@@ -9,15 +9,21 @@ int Enemy::global_count = 0;
 
 void Enemy::Start()
 {
+    texture = new Texture(monster1_png, monster1_png_size);
+    material = new Material();
+    material->SetProperties(shader, texture, camera, {1, 1, 1, 1});
+
     this->transform = new Transform();
     this->transform->position = glm::vec3{3.2f, 1.0f, -0.1f};
     this->transform->rotationAxis = glm::vec3{0.0f, 0.0f, -1.0f};
     this->transform->angle = 0.0f;
     this->transform->scaleAmount = glm::vec3{-1.5f, 1.5f, 1.0f};
 
-    this->sprite = new AnimatedSprite(4, 1, 0.08f, monster1_png, monster1_png_size);
-    this->sprite->PushAnimation(std::vector<int>{0, 1, 2, 3});
-    this->sprite->SwitchAnimation(1, 0.08f);
+    SetupPlane(0, 0, 1, 1);
+    AssignMaterial(material);
+    AssignSprite(4, 1);
+    sprite->AddAnimation(std::vector<int>{0, 1, 2, 3});
+    sprite->SwitchAnimation(1, 0.08f);
 
     this->interval = glm::vec2{0.0f, 360.0f};
     GetDirections(50);
@@ -36,8 +42,30 @@ Enemy::~Enemy()
 }
 
 void Enemy::Update()
-{   timer += GameTime::delta_time;
-    if(timer >= 2.5f)
+{
+    if (invencible_time > 0)
+        invencible_time -= GameTime::delta_time;
+    for (std::list<ProjectileObject *>::iterator it = currScene->entities.begin(); it != currScene->entities.end(); ++it)
+    {
+
+        if (CollisionCircleCircle((*it)->transform->position, 0.125f) && invencible_time <= 0 && (*it)->from_player)
+        {
+            (*it)->RemoveMaterial();
+            currScene->inactive_entities.push_back(*it);
+            it = currScene->entities.erase(it);
+            current_color = glm::vec4{1, 0, 0, 1};
+            invencible_time = 0.05f;
+            break;
+        }
+    }
+
+    if (invencible_time <= 0)
+    {
+        current_color = glm::vec4{1, 1, 1, 1};
+    }
+    
+    timer += GameTime::delta_time;
+    if(timer >= 1.5f)
     {
         
         timer = 0.0;
@@ -50,7 +78,10 @@ void Enemy::Update()
     if (this->bullet_layer >= 0.0505f + 0.001 * directions.size())
         this->bullet_layer = 0.0505f;
     
-    //this->sprite->UpdateAnimation();
+    shader->use();
+    shader->setMat4("projMtx", camera->projMatrix());
+    shader->setVec4("color", current_color);
+    // SimpleMove();
     this->BaseUpdate();
 }
 
@@ -70,7 +101,7 @@ void Enemy::GenerateBullet(glm::vec3 dir, glm::vec3 acc, float speed, glm::vec3 
         bullet = currScene->GetFromInactive();
     else
         bullet = (ProjectileObject *)currScene->memory_pool.New();
-    bullet->Load(bullet_material, this->camera, dir * speed, acc, pos);
+    bullet->Load(bullet_material, this->camera, dir * speed, acc, pos, false);
     currScene->Add(bullet);
 
     this->bullet_layer += 0.001f;
@@ -112,4 +143,22 @@ void Enemy::GetDirections(float amount)
         float cos_angle = cos((angle * PI) / 180);
         directions.push_back(glm::vec3{cos_angle, sin_angle, 0.0f});
     }
+}
+
+void Enemy::SimpleMove()
+{
+    // if(move_counter >= 360)
+    //     move_counter = 0;
+    // else
+    //     move_counter += GameTime::delta_time;
+    move_counter += GameTime::delta_time * 75.0f;
+    float n_x = sin((move_counter * PI) / 180)/3.0f;
+    float n_y = cos((move_counter * PI) / 180);
+    transform->position = glm::vec3{n_x, n_y, 0} + base_pos;
+}
+
+bool Enemy::CollisionCircleCircle(glm::vec3 collider, float col_rad)
+{
+    glm::vec3 res_pos = transform->position + head_pos;
+    return abs(((collider.x - res_pos.x) * (collider.x - res_pos.x)) + ((collider.y - res_pos.y) * (collider.y - res_pos.y))) < ((hitbox_radio + col_rad) * (hitbox_radio + col_rad));
 }

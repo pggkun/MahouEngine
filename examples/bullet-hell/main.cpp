@@ -20,16 +20,17 @@
 
 #include <sakura1_png.h>
 #include <background_png.h>
-#include <dummytex_png.h>
 #include <monster1_png.h>
 #include <bulet2_png.h>
 #include <bullet1_png.h>
-#include <bichin_png.h>
 #include <lua_object.h>
 
+#include <moon_png.h>
+#include <mesh_3d.h>
+
 #define WINDOW_TITLE "Mahou Engine - Bullet Hell"
-#define WIDTH 1280
-#define HEIGHT 720
+#define WIDTH 640
+#define HEIGHT 360
 
 constexpr auto TAU = glm::two_pi<float>();
 
@@ -62,6 +63,10 @@ int main(int ArgCount, char **Args)
         reinterpret_cast<const char *>(sprite_inst_vert_shader),
         reinterpret_cast<const char *>(sprite_inst_frag_shader), nullptr);
 
+    Shader enemy_shader(
+        reinterpret_cast<const char *>(sprite_inst_vert_shader),
+        reinterpret_cast<const char *>(sprite_inst_frag_shader), nullptr);
+
     Camera *mainCam = new Camera();
     mainCam->aperture = 45.0f * TAU / 360.0f;
     mainCam->ratio = 1280.0f / 720.0f;
@@ -90,11 +95,13 @@ int main(int ArgCount, char **Args)
     sakura_entity->Start();
     sakura_entity->sprite->sprite_color = glm::vec4{0.9f, 0.9f, 0.9f, 1.0f};
 
-    // Enemy *enemy = new Enemy(nullptr, mainCam);
-    // enemy->Start();
-    // enemy->player = player;
+    Enemy *enemy = new Enemy();
+    enemy->camera = mainCam;
+    enemy->shader = &enemy_shader;
+    enemy->Start();
+    enemy->player = player;
 
-    // enemy->currScene = bulletScene;
+    enemy->currScene = bulletScene;
 
     AnimatedSprite *sakura2 = new AnimatedSprite(1, 1, 0.1f, sakura1_png, sakura1_png_size);
     Transform *sakura_tr2 = new Transform();
@@ -124,7 +131,7 @@ int main(int ArgCount, char **Args)
     Material *blue_bullets = new Material;
     blue_bullets->SetProperties(&shader, bullet_blue, mainCam, {1, 1, 1, 1});
 
-    // enemy->bullet_material = red_bullets;
+    enemy->bullet_material = red_bullets;
 
     for (int i = 0; i < 800; i++)
     {
@@ -133,14 +140,15 @@ int main(int ArgCount, char **Args)
         bulletScene->inactive_entities.push_back(np);
     }
 
-    glEnable(GL_DEPTH_TEST);
-    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
     glEnable(GL_BLEND);
-    glDepthFunc(GL_LEQUAL);
+    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+    
+    glEnable(GL_DEPTH_TEST);
+    glDepthFunc(GL_ALWAYS);
 
     TextRenderer *text1 = new TextRenderer("../resources/VT323-Regular.ttf", 26);
 
-    Texture *texture = new Texture(dummytex_png, dummytex_png_size);
+    Texture *texture = new Texture(bulet2_png, bulet2_png_size);
     Material *spriteDefault = new Material();
     spriteDefault->SetProperties(&shader, texture, mainCam, {1, 1, 1, 1});
 
@@ -162,14 +170,16 @@ int main(int ArgCount, char **Args)
 
         background->Update();
         background->Draw();
-        window->run();
-
+        window->run();        
+        // mesho.transform.position += glm::vec3{window->xOff * 0.005, window->yOff * 0.005, window->zOff * 0.005f};
+        // // mesho.transform.angle += window->xOff * 0.05f;
+        
         if (window->Fire1)
         {
             ProjectileObject *bullet;
             if (bulletScene->inactive_entities.size() > 0)
                 bullet = bulletScene->GetFromInactive();
-            bullet->Load(blue_bullets, mainCam, glm::vec3{6, 0, 0}, glm::vec3{0, 0, 0},  glm::vec3{player->transform->position.x + 0.4f, player->transform->position.y, 0});
+            bullet->Load(blue_bullets, mainCam, glm::vec3{12, 0, 0}, glm::vec3{0, 0, 0},  glm::vec3{player->transform->position.x + 0.4f, player->transform->position.y, 0}, true);
             bulletScene->Add(bullet);
         }
 
@@ -189,7 +199,7 @@ int main(int ArgCount, char **Args)
         player->x_input = window->xOff;
         player->y_input = window->zOff;
 
-        // enemy->Update();
+        enemy->Update();
         player->Update();
 
         sakura_entity->transform->position.x -= 2.5f * GameTime::delta_time;
@@ -207,11 +217,13 @@ int main(int ArgCount, char **Args)
         sakura_entity->Update();
         sakura_entity2->Update();
 
-        // enemy->Draw();
+        enemy->material->SetupMatrices();
+        enemy->material->Draw();
+
         player->material->SetupMatrices();
         player->material->Draw();
         // player->Draw();
-        // player->DrawLife();
+        player->DrawLife();
         blue_bullets->Draw();
         red_bullets->Draw();
         
@@ -222,11 +234,11 @@ int main(int ArgCount, char **Args)
         window->Fire2 = false;
         window->xOff = 0.0f;
         window->zOff = 0.0f;
-        std::string mmr = "Draw Calls: " + std::to_string(GameTime::draw_calls);
+        std::string mmr = "";
         std::string playerhit = "player hp: " + std::to_string(player->hp);
         std::string fpss = std::to_string((int)(1.0 / GameTime::delta_time)) + " FPS";
         // std::string blts = "Active Bullets: " + std::to_string(bulletScene->entities.size()) + " Inactive Bullets: " + std::to_string(bulletScene->inactive_entities.size());
-        std::string blts = std::to_string(player->transform->position.x)+ ", "+ std::to_string(player->transform->position.y)+", "+ std::to_string(player->transform->position.z);
+        std::string blts = std::to_string(player->transform->position.x) + ", " + std::to_string(player->transform->position.y) + ", " + std::to_string(player->transform->position.z);
         text1->RenderText(text_shader, fpss.c_str(), 25.0f, 310.0f, 1.0f, glm::vec3(1.0, 1.0f, 1.0f));
         text1->RenderText(text_shader, blts.c_str(), 25.0f, 290.0f, 1.0f, glm::vec3(1.0, 1.0f, 1.0f));
     
@@ -240,11 +252,22 @@ int main(int ArgCount, char **Args)
 
     delete spriteDefault;
     delete player;
-    // delete enemy;
+    delete enemy;
+    delete bg;
+    delete background;
+    delete sakura;
     delete sakura_entity;
+    delete sakura2;
     delete sakura_entity2;
     delete window;
     delete mainCam;
     delete text1;
+    delete texture;
+    delete bulletScene;
+    delete bullet_red;
+    delete red_bullets;
+    delete bullet_blue;
+    delete blue_bullets;
+
     return 0;
 }

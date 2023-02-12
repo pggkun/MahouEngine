@@ -15,6 +15,10 @@ protected:
     float bullet_layer;
     GameObject *life_vfx;
     Texture *texture;
+    Texture *life_texture;
+
+    float invencible_time; // 0.05s
+    glm::vec4 current_color{1,1,1,1};
 
 public:
     Player() : GameObject() {}

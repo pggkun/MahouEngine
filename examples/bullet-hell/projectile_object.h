@@ -28,8 +28,10 @@ public:
 
     void RemoveMaterial();
 
-    void Load(Material *mat, Camera *cam, glm::vec3 vel, glm::vec3 acc, glm::vec3 pos);
-    void SoftLoad(glm::vec3 vel, glm::vec3 acc, glm::vec3 pos);
+    bool from_player;
+
+    void Load(Material *mat, Camera *cam, glm::vec3 vel, glm::vec3 acc, glm::vec3 pos, bool f_player);
+    void SoftLoad(glm::vec3 vel, glm::vec3 acc, glm::vec3 pos, bool f_player);
 };
 
 #endif

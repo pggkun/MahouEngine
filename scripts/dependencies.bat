@@ -2,6 +2,7 @@ set SDL_VERSION=2.0.22
 set GLM_VERSION=0.9.9.8
 set FREETYPE_VERSION=2.12.1
 set GLEW_VERSION=2.1.0
+set IMGUI_VERSION=1.89
 @REM set LUA_VERSION=5.4.4
 
 powershell -Command "(New-Object Net.WebClient).DownloadFile('https://www.libsdl.org/release/SDL2-%SDL_VERSION%.tar.gz', 'SDL2-%SDL_VERSION%.tar.gz')"
@@ -79,7 +80,7 @@ move %~dp0lua\include %~dp0deps\lua\
 del /s lua.zip
 @rd /S /Q %~dp0lua
 
-powershell -Command "(New-Object Net.WebClient).DownloadFile('https://github.com/ocornut/imgui/tarball/master', 'imgui.tar.gz')"
+powershell -Command "(New-Object Net.WebClient).DownloadFile('https://github.com/ocornut/imgui/tarball/v%IMGUI_VERSION%', 'imgui.tar.gz')"
 tar -xvf imgui.tar.gz
 mkdir %~dp0deps\ImGUI
 powershell -Command "cp *imgui*/*.h deps/ImGUI/"
