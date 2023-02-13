@@ -48,7 +48,6 @@ int main(int ArgCount, char **Args)
 {
     Window *window = new Window;
     window->init(WINDOW_TITLE, WIDTH, HEIGHT);
-    // glewInit();
     glViewport(0, 0, WIDTH, HEIGHT);
 
     Shader text_shader(
@@ -72,6 +71,10 @@ int main(int ArgCount, char **Args)
         reinterpret_cast<const char *>(sprite_inst_vert_shader),
         reinterpret_cast<const char *>(sprite_inst_frag_shader), nullptr);
 
+    Shader foreground_shader(
+        reinterpret_cast<const char *>(sprite_inst_vert_shader),
+        reinterpret_cast<const char *>(sprite_inst_frag_shader), nullptr);
+
     Camera *mainCam = new Camera();
     mainCam->aperture = 45.0f * TAU / 360.0f;
     mainCam->ratio = 1280.0f / 720.0f;
@@ -88,35 +91,33 @@ int main(int ArgCount, char **Args)
 
     ProjectileScene *bulletScene = new ProjectileScene();
     player->currScene = bulletScene;
-    
-    AnimatedSprite *sakura = new AnimatedSprite(1, 1, 0.1f, sakura1_png, sakura1_png_size);
-    Transform *sakura_tr = new Transform();
-    sakura_tr->position = glm::vec3{6.0f, -1.0f, 1.0f};
-    sakura_tr->rotationAxis = glm::vec3{0.0f, 0.0f, -1.0f};
-    sakura_tr->angle = 0.0f;
-    sakura_tr->scaleAmount = glm::vec3{5.0f, 5.0f, 1.0f};
-    GameEntity *sakura_entity = new GameEntity(sakura, mainCam);
-    sakura_entity->transform = sakura_tr;
-    sakura_entity->Start();
-    sakura_entity->sprite->sprite_color = glm::vec4{0.9f, 0.9f, 0.9f, 1.0f};
+
+    Texture *sak_tex = new Texture(sakura1_png, sakura1_png_size);
+    Material *sak_mat = new Material();
+    sak_mat->SetProperties(&foreground_shader, sak_tex, mainCam, {1, 1, 1, 1});
+
+    GameObject *sakura = new GameObject();
+    sakura->camera = mainCam;
+    sakura->SetupPlane(0, 0, 1, 1);
+    sakura->MoveTo(6.0f, -1.0f, 1.0f);
+    sakura->transform->scaleAmount = glm::vec3{5.0f, 5.0f, 1.0f};
+    sakura->AssignMaterial(sak_mat);
+    sakura->AssignSprite(1, 1);
+
+    GameObject *sakura2 = new GameObject();
+    sakura2->camera = mainCam;
+    sakura2->SetupPlane(0, 0, 1, 1);
+    sakura2->MoveTo(8.0f, -1.6f, 2.5f);
+    sakura2->transform->scaleAmount = glm::vec3{5.0f, 5.0f, 1.0f};
+    sakura2->AssignMaterial(sak_mat);
+    sakura2->AssignSprite(1, 1);
 
     Enemy *enemy = new Enemy();
     enemy->camera = mainCam;
     enemy->shader = &enemy_shader;
     enemy->Start();
     enemy->player = player;
-
     enemy->currScene = bulletScene;
-
-    AnimatedSprite *sakura2 = new AnimatedSprite(1, 1, 0.1f, sakura1_png, sakura1_png_size);
-    Transform *sakura_tr2 = new Transform();
-    sakura_tr2->position = glm::vec3{8.0f, -1.6f, 2.5f};
-    sakura_tr2->rotationAxis = glm::vec3{0.0f, 0.0f, -1.0f};
-    sakura_tr2->angle = 0.0f;
-    sakura_tr2->scaleAmount = glm::vec3{5.0f, 5.0f, 1.0f};
-    GameEntity *sakura_entity2 = new GameEntity(sakura2, mainCam);
-    sakura_entity2->transform = sakura_tr2;
-    sakura_entity2->Start();
 
     AnimatedSprite *bg = new AnimatedSprite(1, 1, 0.1f, background_png, background_png_size);
     Transform *bgt = new Transform();
@@ -156,12 +157,6 @@ int main(int ArgCount, char **Args)
         bulletScene->inactive_entities.push_back(np);
     }
 
-    glEnable(GL_BLEND);
-    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-    
-    glEnable(GL_DEPTH_TEST);
-    glDepthFunc(GL_ALWAYS);
-
     TextRenderer *text1 = new TextRenderer("../resources/VT323-Regular.ttf", 26);
 
     Texture *texture = new Texture(bulet2_png, bulet2_png_size);
@@ -172,7 +167,12 @@ int main(int ArgCount, char **Args)
     window->Fire2 = false;
     double delta_time;
 
+    glEnable(GL_BLEND);
+    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+    glEnable(GL_DEPTH_TEST);
+    glDepthFunc(GL_ALWAYS);
     glEnable(GL_DEBUG_OUTPUT);
+
     while (window->Running)
     {
         uint64_t startTime = SDL_GetPerformanceCounter();
@@ -216,20 +216,31 @@ int main(int ArgCount, char **Args)
         enemy->Update();
         player->Update();
 
-        sakura_entity->transform->position.x -= 2.5f * GameTime::delta_time;
-        if(sakura_entity->transform->position.x <= -6.0f)
+        float foreground_alpha = 1;
+        if(player->transform->position.y < 0 && player->transform->position.y > -1.4f)
         {
-            sakura_entity->transform->position.x = 6.0f;
+            foreground_alpha = std::max(1- (player->transform->position.y / -1.4f), 0.25f);
+        }
+        if(player->transform->position.y <= -1.4f)
+        {
+            foreground_alpha = 0.25f;
         }
 
-        sakura_entity2->transform->position.x -= 2.5f * GameTime::delta_time;
-        if (sakura_entity2->transform->position.x <= -6.0f)
+        foreground_shader.use();
+        foreground_shader.setMat4("projMtx", mainCam->projMatrix());
+        foreground_shader.setVec4("color", {1, 1, 1, foreground_alpha});
+
+        sakura->transform->position.x -= 2.5f * GameTime::delta_time;
+        if(sakura->transform->position.x <= -6.0f)
         {
-            sakura_entity2->transform->position.x = 8.0f;
+            sakura->transform->position.x = 6.0f;
         }
 
-        sakura_entity->Update();
-        sakura_entity2->Update();
+        sakura2->transform->position.x -= 2.5f * GameTime::delta_time;
+        if (sakura2->transform->position.x <= -6.0f)
+        {
+            sakura2->transform->position.x = 8.0f;
+        }
 
         enemy->material->SetupMatrices();
         enemy->material->Draw();
@@ -240,9 +251,11 @@ int main(int ArgCount, char **Args)
         player->DrawLife();
         blue_bullets->Draw();
         red_bullets->Draw();
-        
-        sakura_entity->Draw();
-        sakura_entity2->Draw();
+
+        sakura->Update();
+        sakura2->Update();
+        sak_mat->SetupMatrices();
+        sak_mat->Draw();
 
         ui_shader.use();
         ui_shader.setMat4("projMtx", mainCam->projMatrix());
@@ -256,6 +269,7 @@ int main(int ArgCount, char **Args)
         window->xOff = 0.0f;
         window->zOff = 0.0f;
         std::string fpss = std::to_string((int)(1.0 / GameTime::delta_time)) + " FPS";
+        // std::string fpss = std::to_string(player->transform->position.y);
         text1->RenderText(text_shader, fpss.c_str(), 25.0f, 310.0f, 1.0f, glm::vec3(1.0, 1.0f, 1.0f));
 
         GameTime::draw_calls = 0;
@@ -271,9 +285,9 @@ int main(int ArgCount, char **Args)
     delete bg;
     delete background;
     delete sakura;
-    delete sakura_entity;
+    // delete sakura_entity;
     delete sakura2;
-    delete sakura_entity2;
+    // delete sakura_entity2;
     delete window;
     delete mainCam;
     delete text1;
