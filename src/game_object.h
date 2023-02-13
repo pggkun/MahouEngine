@@ -17,6 +17,7 @@ class GameObject
 
     public:
         GameObject();
+        GameObject(Material *mat, glm::vec3 pos, glm::vec3 scl = glm::vec3{1, 1, 1}, glm::vec2 spr_settings = glm::vec2{1, 1});
         ~GameObject();
 
         Transform *transform;

@@ -96,28 +96,8 @@ int main(int ArgCount, char **Args)
     Material *sak_mat = new Material();
     sak_mat->SetProperties(&foreground_shader, sak_tex, mainCam, {1, 1, 1, 1});
 
-    GameObject *sakura = new GameObject();
-    sakura->camera = mainCam;
-    sakura->SetupPlane(0, 0, 1, 1);
-    sakura->MoveTo(6.0f, -1.0f, 1.0f);
-    sakura->transform->scaleAmount = glm::vec3{5.0f, 5.0f, 1.0f};
-    sakura->AssignMaterial(sak_mat);
-    sakura->AssignSprite(1, 1);
-
-    GameObject *sakura2 = new GameObject();
-    sakura2->camera = mainCam;
-    sakura2->SetupPlane(0, 0, 1, 1);
-    sakura2->MoveTo(8.0f, -1.6f, 2.5f);
-    sakura2->transform->scaleAmount = glm::vec3{5.0f, 5.0f, 1.0f};
-    sakura2->AssignMaterial(sak_mat);
-    sakura2->AssignSprite(1, 1);
-
-    Enemy *enemy = new Enemy();
-    enemy->camera = mainCam;
-    enemy->shader = &enemy_shader;
-    enemy->Start();
-    enemy->player = player;
-    enemy->currScene = bulletScene;
+    GameObject *sakura = new GameObject(sak_mat, {6.0f, -1.0f, 1.0f}, {5.0f, 5.0f, 1.0f});
+    GameObject *sakura2 = new GameObject(sak_mat, {8.0f, -1.6f, 2.5f}, {5.0f, 5.0f, 1.0f});
 
     AnimatedSprite *bg = new AnimatedSprite(1, 1, 0.1f, background_png, background_png_size);
     Transform *bgt = new Transform();
@@ -140,14 +120,14 @@ int main(int ArgCount, char **Args)
     Texture *ui = new Texture(ui_png, ui_png_size);
     Material *ui_mat = new Material;
     ui_mat->SetProperties(&ui_shader, ui, mainCam, {1, 1, 1, 1});
-    GameObject *ui_obj = new GameObject();
-    ui_obj->camera = mainCam;
-    ui_obj->SetupPlane(0, 0, 1, 1);
-    ui_obj->MoveTo(0, 0.218f, 5.328f);
+    GameObject *ui_obj = new GameObject(ui_mat, {0, 0.218f, 5.328f});
 
-    ui_obj->AssignMaterial(ui_mat);
-    ui_obj->AssignSprite(1, 1);
-
+    Enemy *enemy = new Enemy();
+    enemy->camera = mainCam;
+    enemy->shader = &enemy_shader;
+    enemy->Start();
+    enemy->player = player;
+    enemy->currScene = bulletScene;
     enemy->bullet_material = red_bullets;
 
     for (int i = 0; i < 800; i++)

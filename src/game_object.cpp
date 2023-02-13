@@ -9,7 +9,23 @@ GameObject::GameObject()
     transform->scaleAmount = glm::vec3{1, 1, 1};
 }
 
-GameObject::~GameObject()
+GameObject::GameObject(Material *mat, glm::vec3 pos, glm::vec3 scl, glm::vec2 spr_settings)
+{
+    camera = mat->camera;
+    material = mat;
+
+    transform = new Transform();
+    transform->position = pos;
+    transform->rotationAxis = glm::vec3{0, 0, -1};
+    transform->angle = 0;
+    transform->scaleAmount = scl;
+
+    SetupPlane(0, 0, 1, 1);
+    AssignMaterial(material);
+    AssignSprite((int)spr_settings.x, (int)spr_settings.y);
+}
+
+    GameObject::~GameObject()
 {
     delete transform;
     delete mesh;
